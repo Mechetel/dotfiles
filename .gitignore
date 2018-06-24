@@ -1,0 +1,11 @@
+ranger/history
+ranger/bookmarks
+ranger/tagged
+tmux/plugins/*
+!tmux/plugins/tpm
+__pycache__/
+nvim/.netrwhist
+nvim/bundle
+!nvim/bundle/repos/github.com/Shougo/dein.vim
+.cache
+commitlint/node_modules

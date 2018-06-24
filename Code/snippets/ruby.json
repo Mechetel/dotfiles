@@ -1,0 +1,9 @@
+{
+	"pry": {
+		"prefix": "pry",
+		"body": [
+			"require 'pry'; ::Kernel.binding.pry;"
+		],
+		"description": "Log output to console"
+	}
+}

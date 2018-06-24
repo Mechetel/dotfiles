@@ -1,0 +1,20 @@
+templates:
+  params:
+   author-name: mechetel
+   author-email: dima.homa5@gmail.com
+   copyright: MIT
+   github-username: mechetel
+
+nix:
+  enable: true
+  packages:
+    - libcxx
+    - icu
+    - gcc
+    - ncurses
+    - zlib
+
+# extra-deps:
+# - intero
+# - QuickCheck
+# - stack-run

@@ -1,0 +1,35 @@
+{
+    "editor.fontSize": 12,
+    "files.autoSave": "off",
+    "editor.renderWhitespace": "all",
+    "editor.fontFamily": "DejaVu Sans Mono",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "gitlens.advanced.messages": {
+        "suppressCommitHasNoPreviousCommitWarning": false,
+        "suppressCommitNotFoundWarning": false,
+        "suppressFileNotUnderSourceControlWarning": false,
+        "suppressGitVersionWarning": false,
+        "suppressLineUncommittedWarning": false,
+        "suppressNoRepositoryWarning": false,
+        "suppressResultsExplorerNotice": false,
+        "suppressShowKeyBindingsNotice": true,
+        "suppressUpdateNotice": true,
+        "suppressWelcomeNotice": false
+    },
+    "editor.wordWrap": "on",
+    "extensions.ignoreRecommendations": true,
+    "gitlens.keymap": "alternate",
+    "gitlens.historyExplorer.enabled": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/*.pyc": true,
+        "**/node_modules": true,
+    },
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": false
+}

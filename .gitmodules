@@ -1,0 +1,12 @@
+[submodule "oh-my-zsh/custom/plugins/zsh-completions"]
+	path = oh-my-zsh/custom/plugins/zsh-completions
+	url = https://github.com/zsh-users/zsh-completions
+[submodule "oh-my-zsh/custom/plugins/zsh-autosuggestions"]
+	path = oh-my-zsh/custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "nvim/bundle/repos/github.com/Shougo/dein.vim"]
+	path = nvim/bundle/repos/github.com/Shougo/dein.vim
+	url = https://github.com/Shougo/dein.vim
+[submodule "tmux/plugins/tpm"]
+	path = tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
