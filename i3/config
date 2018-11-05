@@ -1,4 +1,4 @@
-# vim: ft=i3
+#Create Readme.md vim: ft=i3
 
 set $mod Mod4
 floating_modifier $mod
