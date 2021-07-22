@@ -41,7 +41,7 @@ endif
 set showfulltag
 set shell=/bin/sh
 set noshelltemp                                     "use pipes
-set clipboard=unnamed
+" set clipboard=unnamed
 set inccommand=nosplit
 set undofile
 " set paste
@@ -107,11 +107,12 @@ endfunction "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Core
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call dein#add('wsdjeg/dein-ui.vim')
 call dein#add('vim-scripts/matchit.zip')
 call dein#add('vim-airline/vim-airline') "{{{
   let g:airline_powerline_fonts = 1
   let g:airline#extensions#tabline#enabled = 1
-  let g:airline#extensions#tabline#left_sep = ' '
+  let g:airline#extensions#tabline#left_sep = ''
   let g:airline#extensions#tabline#left_alt_sep = '¦'
   let g:airline#extensions#tabline#buffer_idx_mode = 1
   let g:airline#extensions#syntastic#enabled = 1
@@ -150,21 +151,24 @@ call dein#add('mhinz/vim-startify') "{{{
     \ |   redraw!
     \ | endif
 
-  nnoremap <F1> :Startify<cr>
   nnoremap <leader>S :SSave <C-R>=fnamemodify(getcwd(), ':t')<cr><cr>
 "}}}
-call dein#add('neomake/neomake') " {{{
-  autocmd! BufWritePost * Neomake
-  let g:neomake_open_list = 0
-  " let g:neomake_verbose = 3
 
-  let g:neomake_ruby_enabled_makers = ['rubocop']
-  let g:neomake_typescript_enabled_makers = ['tslint']
-  " let g:neomake_typescript_tslint_args = ['--fix']
+" function s:on_neomake_source()
+"   call neomake#configure#automake('w')
+" endfunction
+" call dein#add('neomake/neomake', {'hook_post_source': function('s:on_neomake_source')}) " {{{
+"   " let g:neomake_open_list = 0
+"   " let g:neomake_verbose = 3
 
-  " flow fix
-  " call dein#add('benjie/neomake-local-eslint.vim')
-" }}}
+"   let g:neomake_ruby_enabled_makers = ['rubocop']
+"   let g:neomake_sql_enabled_makers = ['sqlint']
+"   let g:neomake_typescript_enabled_makers = ['tslint']
+"   " let g:neomake_typescript_tslint_args = ['--fix']
+
+"   " flow fix
+"   " call dein#add('benjie/neomake-local-eslint.vim')
+" " }}}
 call dein#add('zhaocai/GoldenView.Vim', {'on_map':['<Plug>ToggleGoldenViewAutoResize']}) "{{{
   let g:goldenview__enable_default_mapping=0
 "}}}
@@ -190,11 +194,11 @@ call dein#add('jszakmeister/vim-togglecursor')
 " => Git
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('airblade/vim-gitgutter') " {{{
-  nmap ]h <Plug>GitGutterNextHunk
-  nmap [h <Plug>GitGutterPrevHunk
+  nmap ]h <Plug>(GitGutterNextHunk)
+  nmap [h <Plug>(GitGutterPrevHunk)
 " }}}
 call dein#add('tpope/vim-fugitive') "{{{
-  nnoremap <silent> <leader>ga :Git add --all<CR>
+  nnoremap <silent> <leader>ga :silent !git add --all<CR>
   nnoremap <silent> <leader>gs :Gstatus<CR>
   nnoremap <silent> <leader>gd :Gdiff<CR>
   nnoremap <silent> <leader>gc :Gcommit<CR>
@@ -214,9 +218,9 @@ call dein#add('Shougo/neosnippet') " {{{
   set conceallevel=2 concealcursor=niv
   let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
 
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  xmap <C-k> <Plug>(neosnippet_expand_target)
+  imap <C-e> <Plug>(neosnippet_expand_or_jump)
+  smap <C-e> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-e> <Plug>(neosnippet_expand_target)
 
   inoremap <expr><TAB>
     \ pumvisible() ? "\<C-n>" :
@@ -224,15 +228,13 @@ call dein#add('Shougo/neosnippet') " {{{
     \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
   snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
     \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
 " }}}
 
 call dein#add('Shougo/deoplete.nvim') " {{{
   let g:deoplete#enable_at_startup = 1
-  let g:deoplete#auto_complete_delay = 150
 
   " initialize with empty, to use it later on per language
-  let g:deoplete#omni#input_patterns = {}
+  let g:deoplete#custom#var = {}
 
   " set completeopt=longest,menuone,preview
   "Amount of entries in completion popup
@@ -243,18 +245,57 @@ call dein#add('Shougo/echodoc.vim') " {{{
 " }}}
 " " call dein#add('thalesmello/webcomplete.vim')
 
-"call dein#add('autozimu/LanguageClient-neovim', {
-"    \ 'rev': 'next',
-"    \ 'build': 'bash install.sh',
-"    \ })
+call dein#add('autozimu/LanguageClient-neovim', {
+    \ 'rev': 'next',
+    \ 'build': './install.sh',
+    \ })
+
+" https://github.com/sriharshachilakapati/dotfiles/blob/f1635f73eccd36a493f168b34e67bd1fa5e0e123/.vimrc#L117
+" https://github.com/sduchesneau/nvim-config/blob/0f3ce63e825e27f0a0a631c68743435432e56cf8/bundle/.neobundle/doc/ale-purescript.txt#L18
+let purescriptConfigWrapper =
+    \ { 'purescript':
+    \   { 'autoStartPscIde': v:true
+    \   , 'pscIdePort': v:null
+    \   , 'addSpagoSources': v:true
+    \   , 'autocompleteAddImport': v:true
+    \   , 'pursExe': 'purs'
+    \   , 'addNpmPath': v:true
+    \   , 'buildCommand': 'spago --config app/spago.dhall build -- --json-errors'
+    \   }
+    \ }
 
 let g:LanguageClient_serverCommands = {
+    \ 'haskell':    ['hie', '--lsp'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'purescript': ['purescript-language-server', '--stdio', '--config', json_encode(purescriptConfigWrapper)]
     \ }
+    " \ 'nix': ['nix-lsp'],
+
+let g:LanguageClient_rootMarkers = {
+    \ 'javascript': ['project.json'],
+    \ 'rust': ['Cargo.toml'],
+    \ 'purescript': ['bower.json', 'psc-package.json', 'spago.dhall'],
+    \ }
+
+autocmd filetype purescript setlocal omnifunc=LanguageClient#complete
+
+" nnoremap <F4> :call LanguageClient_contextMenu()<CR>
+
+" let g:LanguageClient_devel = 1 " Use rust debug build
+" let g:LanguageClient_loggingLevel = 'DEBUG' " Use highest logging level
+" let g:LanguageClient_loggingFile = 'nvim.log' " Use highest logging level
+" let g:LanguageClient_serverStderr = 'language-server.log' " Use highest logging level
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
+let g:LanguageClient_diagnosticsList = "Disabled" " fix error with easy-grep
+
+" support for haskell-ide-engine errors (e.g. underline errors)
+hi link ALEError Error
+hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
+hi link ALEWarning Warning
+hi link ALEInfo SpellCap
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tmux
@@ -278,10 +319,10 @@ if $TMUX != ''
   autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/jellybeans_tmuxline
   autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline
 
-  " call dein#add('edkolev/tmuxline.vim') " {{{
-  "   let g:tmuxline_theme = 'jellybeans'
-  "   let g:tmuxline_preset = 'minimal'
-  " " }}}
+  call dein#add('edkolev/tmuxline.vim') " {{{
+    let g:tmuxline_theme = 'jellybeans'
+    let g:tmuxline_preset = 'minimal'
+  " }}}
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -289,7 +330,18 @@ endif
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('editorconfig/editorconfig-vim', {'on_i':1})
 call dein#add('tpope/vim-endwise')
-call dein#add('tpope/vim-speeddating')
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function s:on_tpope_vim_speeddating_source()
+  nmap  <C-A-X>   <Plug>SpeedDatingUp
+  nmap  <C-X>     <Plug>SpeedDatingDown
+endfunction
+let g:speeddating_no_mappings=1
+call dein#add('tpope/vim-speeddating', {'hook_post_source': function('s:on_tpope_vim_speeddating_source')})
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 call dein#add('thinca/vim-visualstar')
 
 function s:on_commentary_source()
@@ -303,7 +355,10 @@ call dein#add('terryma/vim-expand-region') " mapping - + and _
 call dein#add('chrisbra/NrrwRgn') " mapping - ,nr
 call dein#add('jiangmiao/auto-pairs') "{{{
   let g:AutoPairsShortcutToggle = ''
-  let g:AutoPairsMapCh = 0
+  let g:AutoPairsMapCh = 0 " I use `move to left pane` here
+  let g:AutoPairsFlyMode = 0
+  let g:AutoPairsShortcutBackInsert = ''
+  let g:AutoPairsMultilineClose = 0
 "}}}
 call dein#add('justinmk/vim-sneak') "{{{
   let g:sneak#streak = 1
@@ -347,6 +402,9 @@ call dein#add('romgrk/replace.vim') " {{{
 " }}}
 
 call dein#add('AndrewRadev/deleft.vim') " mapping - dh
+" call dein#add('triglav/vim-visual-increment') " use CTRL+A/X to create increasing sequence of numbers or letters via visual mode
+" vmap <C-S> <Plug>VisualDecrement
+" vmap <C-X> <Plug>VisualIncrement
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Navigation
@@ -359,12 +417,15 @@ call dein#add('dkprice/vim-easygrep') "{{{
   let g:EasyGrepAllOptionsInExplorer=1
   let g:EasyGrepCommand=1
   let g:EasyGrepFilesToExclude=".svn,.git,node_modules"
+  let g:EasyGrepWindow=0 " Specifies the window to use for matches.  0 - quickfix 1 - location list
   nnoremap <leader>vo :GrepOptions<cr>
+  nnoremap <Space>g :Grep<Space>
+  nnoremap <Space>r :Replace<Space>
 "}}}
 call dein#add('mbbill/undotree', {'on_cmd':'UndotreeToggle'}) "{{{
   let g:undotree_SplitLocation='botright'
   let g:undotree_SetFocusWhenToggle=1
-  nnoremap <silent> <F5> :UndotreeToggle<CR>
+  nnoremap <silent> <F1> :UndotreeToggle<CR>
 "}}}
 call dein#add('scrooloose/nerdtree', {'on_cmd':['NERDTreeToggle','NERDTreeFind']}) "{{{
   let NERDTreeShowHidden=1
@@ -372,7 +433,7 @@ call dein#add('scrooloose/nerdtree', {'on_cmd':['NERDTreeToggle','NERDTreeFind']
   let NERDTreeShowLineNumbers=1
   let NERDTreeChDirMode=0
   let NERDTreeShowBookmarks=1
-  let NERDTreeIgnore=['\.git$','\.hg$','\node_modules$','\.pyc$']
+  let NERDTreeIgnore=['\.git$','\.hg$','\node_modules$','\.pyc$', '^__generated__$','\.agdai$','\.agda\.vim$']
   let NERDTreeBookmarksFile=s:get_cache_dir('NERDTreeBookmarks')
 
   " disable f and F in privilege of find commands
@@ -420,33 +481,31 @@ call dein#add('mhinz/vim-sayonara') " {{{
 " => Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-call dein#add('Shougo/denite.nvim') " {{{
-  call denite#custom#var('file_rec', 'command', ['ag', '--vimgrep', '--hidden',
-    \ '--ignore', '.hg',
-    \ '--ignore', '.svn',
-    \ '--ignore', '.git',
-    \ '--ignore', '.bzr',
-    \ '--ignore', '.cache'])
-  call denite#custom#map('normal', 'Q', '<denite:quit>', 'noremap')
-" }}}
-call dein#add('Shougo/neomru.vim')
+" " http://ctrlpvim.github.io/ctrlp.vim/#installation
+" Press <F5> to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
+" Press <c-f> and <c-b> to cycle between modes.
+" Press <c-d> to switch to filename search instead of full path.
+" Press <c-r> to switch to regexp mode.
+" Use <c-j>, <c-k> or the arrow keys to navigate the result list.
+" Use <c-t> or <c-v>, <c-x> to open the selected entry in a new tab or in a new split.
+" Use <c-n>, <c-p> to select the next/previous string in the prompt's history.
+" Use <c-y> to create a new file and its parent directories.
+" Use <c-z> to mark/unmark multiple files and <c-o> to open them.
 
-nmap <space> [denite]
-nnoremap [denite] <nop>
+call dein#add('ctrlpvim/ctrlp.vim')
+let g:ctrlp_map = '<Space><Space>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
 
-nnoremap <silent> [denite]l :<C-u>Denite line<cr>
-nnoremap <silent> [denite]m :<C-u>Denite file_mru <cr>
-nnoremap <silent> [denite]b :<C-u>Denite buffer<cr>
-nnoremap <silent> [denite]j :<C-u>JunkfileTodo<cr>
-nnoremap [denite]g :<C-u>Grep<space>
-" nnoremap <silent> [denite]y :<C-u>Denite neoyank<cr>
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 
-" git project nav {{{
-  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-  call denite#custom#var('file_rec/git', 'command',
-    \ ['git', 'ls-files', '-co', '--exclude-standard'])
-  nnoremap <silent> [denite]<space> :<C-u>Denite `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
-" }}}
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ }
+
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Textobj
@@ -526,7 +585,7 @@ exec "au BufNewFile,BufRead *.rb NeoSnippetSource ".neosimpp_path."rails.snip"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Elm
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" call dein#add('ElmCast/elm-vim') " {{{
+" call dein#add('ElmCast/elm-vim', {'on_ft':['elm']}) " {{{
 "   let g:elm_format_autosave = 1
 "   let g:elm_setup_keybindings = 0 " use bindings from ftplugin/elm.vim
 
@@ -535,15 +594,15 @@ exec "au BufNewFile,BufRead *.rb NeoSnippetSource ".neosimpp_path."rails.snip"
 "   let g:elm_syntastic_show_warnings = 1
 
 "   " let g:deoplete#omni#functions.elm = ['elm#Complete']
-"   " let g:deoplete#omni#input_patterns.elm = '[^ \t]+'
+"   " let g:deoplete#custom#var.elm = '[^ \t]+'
 "   " let g:deoplete#sources.elm = ['omni'] + g:deoplete#sources._
 " " }}}
-" call dein#add('pbogut/deoplete-elm')
+" call dein#add('pbogut/deoplete-elm', {'on_ft':['elm']})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Idris
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" call dein#add('idris-hackers/idris-vim')
+call dein#add('idris-hackers/idris-vim', { 'on_ft':['idris'] })
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Python
@@ -552,7 +611,7 @@ exec "au BufNewFile,BufRead *.rb NeoSnippetSource ".neosimpp_path."rails.snip"
 " let python_highlight_all = 1
 " let python_version_2 = 1
 
-call dein#add('vim-python/python-syntax')
+call dein#add('vim-python/python-syntax', { 'on_ft':['python'] })
 let g:python_highlight_all = 1
 let g:python_version_2 = 1
 
@@ -560,19 +619,6 @@ let g:python_version_2 = 1
 " => Haskell
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('neovimhaskell/haskell-vim', { 'on_ft':['haskell'] })
-
-call dein#add('eagletmt/neco-ghc', { 'on_ft':['haskell'] })
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-call dein#add('Twinside/vim-hoogle', { 'on_ft':['haskell'] })
-
-call dein#add('parsonsmatt/intero-neovim', { 'on_ft':['haskell'] })
-let g:intero_type_on_hover = 1
-" call dein#add('glittershark/vim-hare', { 'on_ft':['haskell'] })
-
-" Reloading (pick one)
-" Automatically reload on save
-au BufWritePost *.hs InteroReload
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => C#
@@ -585,30 +631,35 @@ au BufWritePost *.hs InteroReload
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Purescript
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" call dein#add('purescript-contrib/purescript-vim', { 'on_ft':['purescript'] })
-" call dein#add('FrigoEU/psc-ide-vim', { 'on_ft':['purescript'] })
+call dein#add('purescript-contrib/purescript-vim', { 'on_ft':['purescript'] })
+call dein#add('FrigoEU/psc-ide-vim', { 'on_ft':['purescript'] })
+call dein#add('srghma/vim-purs-module-name', { 'on_ft':['purescript'] })
 " let g:psc_ide_log_level=4
 
 " checking in file
-" let g:deoplete#omni#input_patterns.purescript = '[^. *\t]'
-" let g:deoplete#omni#input_patterns.purescript = '[.\w]+'
+let g:deoplete#custom#var.purescript = '[^. *\t]'
+let g:deoplete#custom#var.purescript = '[.\w]+'
 " checking wia `pulp -w build` (faster)
 " let g:psc_ide_syntastic_mode = 0
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Nix
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call dein#add('LnL7/vim-nix', { 'on_ft':['nix'] })
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " call dein#add('kana/vim-vspec') " Testing framework
-call dein#add('jparise/vim-graphql', {'on_ft':['graphql']})
-call dein#add('tpope/vim-scriptease', {'on_ft':['vim']})
-call dein#add('tpope/vim-markdown',{'on_ft':['markdown']})
-call dein#add('PotatoesMaster/i3-vim-syntax',{'on_ft':['i3']})
-call dein#add('chr4/nginx.vim')
+
+call dein#add('aklt/plantuml-syntax',         {'on_ft':['plantuml']})
+call dein#add('jparise/vim-graphql',          {'on_ft':['graphql']})
+call dein#add('tpope/vim-scriptease',         {'on_ft':['vim']})
+call dein#add('plasticboy/vim-markdown',      {'on_ft':['markdown']})
+let g:vim_markdown_conceal_code_blocks = 0
+let g:vim_markdown_fenced_languages = ['csharp=cs', 'c++=cpp', 'viml=vim', 'bash=sh', 'ini=dosini', 'purs=purescript']
+call dein#add('PotatoesMaster/i3-vim-syntax', {'on_ft':['i3']})
+call dein#add('chr4/nginx.vim',               {'on_ft':['nginx']})
+call dein#add('vim-scripts/vim-terraform',    {'on_ft':['terraform']})
+call dein#add('LnL7/vim-nix',                 {'on_ft':['nix']})
+call dein#add('derekelkins/agda-vim',         {'on_ft':['agda']})
+call dein#add('vmchale/dhall-vim',            {'on_ft':['dhall']})
+
 " call dein#add('takac/vim-hardtime') " {{{
 "   let g:hardtime_default_on = 1
 "   let g:hardtime_allow_different_key = 1
@@ -643,7 +694,7 @@ call dein#add('chr4/nginx.vim')
 "   nmap <leader>gf yif<C-k>:e <M-p><CR>
 " }}}
 " call dein#add('bramblex/ranger.vim', { 'depends': 'rbgrouleff/bclose.vim' }) " {{{
-"   let g:ranger_path='SHELL=/home/mechetel/.config/ranger/rshell ranger --cmd "set colorscheme snow"'
+"   let g:ranger_path='SHELL=/home/srghma/.config/ranger/rshell ranger --cmd "set colorscheme snow"'
 " " }}}
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -794,7 +845,7 @@ map J <Plug>(IndentWiseBlockScopeBoundaryEnd)
 
 nnoremap <M-i> J
 
-function! UmsfRemoveChars() abort
+function! RemoveNonascii() abort
   exe "normal! :s:\ \|(\|)\|\.::g"
 endfunction
 
@@ -802,6 +853,7 @@ endfunction
 " => Finish
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('nanotech/jellybeans.vim')
+call dein#add('morhetz/gruvbox')
 call dein#add('ryanoasis/vim-devicons')
 
 call dein#end()
@@ -814,7 +866,12 @@ autocmd VimEnter * call dein#call_hook('post_source')
 
 filetype plugin indent on
 syntax enable
+
+set background=dark   " Setting light mode
 colorscheme jellybeans
+
+" set background=light   " Setting light mode
+" colorscheme gruvbox
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocommands
@@ -828,20 +885,28 @@ autocmd BufReadPost *
 " autosave
 autocmd FocusLost * silent! wall
 set autowriteall
-
 autocmd BufRead,BufNewFile *.conf setf dosini
 
 autocmd FileType css,scss setlocal foldmethod=marker foldmarker={,}
 autocmd FileType python setlocal foldmethod=indent
 autocmd FileType markdown setlocal nolist
 autocmd FileType yaml,eruby.yaml setlocal tabstop=2 shiftwidth=2 commentstring=#\ %s
+autocmd FileType agda setlocal commentstring=--\ %s
+autocmd FileType purescript setlocal iskeyword+=- commentstring=--\ \|\ %s
+autocmd FileType zsh setlocal iskeyword+=-
 " autocmd FileType typescript setlocal tabstop=2 shiftwidth=2 expandtab
 
 " force filetype on odd extension
-au BufRead,BufNewFile Dockerfile.template set filetype=dockerfile
-au BufRead,BufNewFile *.js.erb set filetype=javascript
-au BufRead,BufNewFile *.mjml set filetype=slim
-au BufRead,BufNewFile Vagrantfile,Guardfile set filetype=ruby
+autocmd BufRead,BufNewFile Dockerfile.template set filetype=dockerfile
+autocmd BufRead,BufNewFile *.js.erb set filetype=javascript
+autocmd BufRead,BufNewFile *.mjml set filetype=slim
+autocmd BufRead,BufNewFile Vagrantfile,Guardfile set filetype=ruby
+autocmd BufRead,BufNewFile emacs,spaceemacs set filetype=lisp
+autocmd BufRead,BufNewFile *.axlsx set filetype=ruby
+autocmd BufRead,BufNewFile *.agda setf agda
 
 " autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 expandtab
 " autocmd FileType html,javascript setlocal tabstop=2 shiftwidth=2 softtabstop=0 copyindent preserveindent noexpandtab
+
+" nmap g[ 0ciw1<ESC>
+" nmap g] 0kyiwjciw<M-p><ESC>

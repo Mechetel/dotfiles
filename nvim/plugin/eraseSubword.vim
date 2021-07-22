@@ -80,6 +80,6 @@ function s:Erase()
 endfunction
 
 
-let g:EraseSubword_insertMap = "<C-W>"
+let g:EraseSubword_insertMap = "<C-P>"
 
 execute "inoremap <silent> <unique> " . g:EraseSubword_insertMap . " <Esc>:call <SID>Erase()<CR>"

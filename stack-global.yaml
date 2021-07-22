@@ -6,7 +6,7 @@ templates:
    github-username: mechetel
 
 nix:
-  enable: true
+  enable: false
   packages:
     - libcxx
     - icu

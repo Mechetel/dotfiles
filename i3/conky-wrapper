@@ -1,5 +1,0 @@
-#! /bin/sh
-
-echo "{\"version\":1}"
-echo "[[],"
-conky -q -c $HOME/.dotfiles/i3/conkyrc
