@@ -107,7 +107,6 @@ endfunction "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Core
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call dein#add('wsdjeg/dein-ui.vim')
 call dein#add('vim-scripts/matchit.zip')
 call dein#add('vim-airline/vim-airline') "{{{
   let g:airline_powerline_fonts = 1
@@ -539,6 +538,9 @@ call dein#add('mustache/vim-mustache-handlebars', {'on_ft':['mustache','handleba
 call dein#add('Valloric/MatchTagAlways')
 call dein#add('slim-template/vim-slim', {'on_ft':['slim']})
 call dein#add('mattn/emmet-vim', {'on_ft':['html','vue','xml','xsl','xslt','xsd','css','sass','scss','less','mustache','handlebars','ts','javascript','jsx','typescript','eruby']})
+
+let g:user_emmet_leader_key=','
+
 autocmd FileType html,vue,xml,xsl,xslt,xsd,css,sass,scss,less,mustache,handlebars,ts,javascript,jsx,typescript,eruby imap <buffer><c-y><c-y> <c-y>,
 autocmd FileType html,vue,xml,xsl,xslt,xsd,css,sass,scss,less,mustache,handlebars,ts,javascript,jsx,typescript,eruby vmap <buffer><c-y><c-y> <c-y>,
 

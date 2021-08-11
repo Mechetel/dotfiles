@@ -8,6 +8,9 @@ export PATH="$HOME/.local/bin:$PATH"
 
 export ZSH="/Users/dmitryhoma/.oh-my-zsh"
 
+export EDITOR=/usr/local/bin/nvim
+export VISUAL=/usr/local/bin/nvim
+
 ZSH_THEME="agnoster"
 
 DEFAULT_USER="$USER"
