@@ -6,6 +6,11 @@ inhome_indotfiles = [
   ['.zshrc',                                  'zshrc'],
   ['.tmux.conf',                              'tmux.conf'],
 
+  ['.config/ranger/commands.py',              'ranger/commands.py'],
+  ['.config/ranger/history',                  'ranger/history'],
+  ['.config/ranger/rc.conf',                  'ranger/rc.conf'],
+  ['.config/ranger/scope.sh',                 'ranger/scope.sh'],
+  
   ['.gtkrc-2.0',                              'themes/gtkrc-2.0'],
 
   ['.stack/config.yaml',                      'stack-global.yaml'],

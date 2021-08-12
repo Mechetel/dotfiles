@@ -3,7 +3,12 @@
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Initialize defaults
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Setup Shougo/dein.vim plugin manager
+if (!isdirectory(expand('$HOME/.config/nvim/bundle/repos/github.com/Shougo/dein.vim')))
+    call system(expand('mkdir -p $HOME/.config/nvim/bundle/repos/github.com'))
+    call system(expand('git clone https://github.com/Shougo/dein.vim $HOME/.config/nvim/bundle/repos/github.com/Shougo/dein.vim'))
+endif
+
 " setup & dein {{{
   set rtp+=~/.config/nvim/bundle/repos/github.com/Shougo/dein.vim
   call dein#begin(expand('~/.config/nvim/bundle/'))
@@ -389,7 +394,8 @@ call dein#add('tpope/vim-abolish') " {{{
   vmap     <leader>A :Subvert:::g<left><left><left>
 " }}}
 
-call dein#add('itchyny/vim-cursorword') " underscore word under cursor
+call dein#add('itchyny/vim-cursorword') " underline words under cursor
+call dein#add('itchyny/calendar.vim')
 call dein#add('AndrewRadev/switch.vim') " mapping - gs
 call dein#add('romgrk/replace.vim') " {{{
   let g:replace_register = '_'
