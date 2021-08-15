@@ -35,6 +35,9 @@ endfunction "}}}
 let &directory = s:get_cache_dir('swap')
 set noswapfile
 
+let directory = '~/.config/nvim/.directory'
+let undodir = '~/.config/nvim/.undodirectory'
+
 call EnsureExists(s:cache_dir)
 call EnsureExists(&directory)
 
