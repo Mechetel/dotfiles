@@ -133,7 +133,11 @@ call dein#add('vim-airline/vim-airline') "{{{
   nmap <leader>8 <Plug>AirlineSelectTab8
   nmap <leader>9 <Plug>AirlineSelectTab9
 "}}}
+"
 call dein#add('tpope/vim-surround')
+autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('=')} = "<%= \r %>"
+autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('-')} = "<% \r %>"
+
 call dein#add('tpope/vim-repeat')
 call dein#add('tpope/vim-unimpaired') "{{{
   nmap <c-up> [e

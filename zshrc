@@ -2,9 +2,8 @@
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 export PATH="$HOME/.node_modules/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:$HOME/.rvm/bin"
 # Path to your oh-my-zsh installation.
-
-# ZSH=$HOME/.oh-my-zsh
 
 export ZSH="/Users/dmitryhoma/.oh-my-zsh"
 
@@ -14,7 +13,6 @@ export VISUAL=/usr/local/bin/nvim
 ZSH_THEME="agnoster"
 
 DEFAULT_USER="$USER"
-
 
 plugins=(
   git
@@ -57,6 +55,3 @@ for file in $HOME/.dotfiles/zsh/*.sh; do
 done
 
 PROJECT_PATHS=($HOME/projects)
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
