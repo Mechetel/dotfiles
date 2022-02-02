@@ -134,6 +134,7 @@ call dein#add('vim-airline/vim-airline') "{{{
   nmap <leader>9 <Plug>AirlineSelectTab9
 "}}}
 "
+call dein#add('prettier/vim-prettier', {'build': 'npm install'})
 call dein#add('tpope/vim-surround')
 autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('=')} = "<%= \r %>"
 autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('-')} = "<% \r %>"

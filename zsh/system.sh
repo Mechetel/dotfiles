@@ -6,6 +6,7 @@ alias r="ranger"
 alias top="htop"
 alias o="openssl"
 alias d="docker"
+alias py="python3"
 
 # usage ln-s whatfile wherefile
 alias ln-s="ln -sfT"
