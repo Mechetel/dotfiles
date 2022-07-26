@@ -146,7 +146,7 @@ call dein#add('tpope/vim-unimpaired') "{{{
   vmap <c-up> [egv
   vmap <c-down> ]egv
 "}}}
-
+" call dein#add('qpkorr/vim-bufkill')
 call dein#add('mhinz/vim-startify') "{{{
   let g:startify_session_dir = s:get_cache_dir('sessions')
   let g:startify_change_to_vcs_root = 1
@@ -166,6 +166,21 @@ call dein#add('mhinz/vim-startify') "{{{
   nnoremap <leader>S :SSave <C-R>=fnamemodify(getcwd(), ':t')<cr><cr>
 "}}}
 
+" function s:on_neomake_source()
+"   call neomake#configure#automake('w')
+" endfunction
+" call dein#add('neomake/neomake', {'hook_post_source': function('s:on_neomake_source')}) " {{{
+"   " let g:neomake_open_list = 0
+"   " let g:neomake_verbose = 3
+
+"   let g:neomake_ruby_enabled_makers = ['rubocop']
+"   let g:neomake_sql_enabled_makers = ['sqlint']
+"   let g:neomake_typescript_enabled_makers = ['tslint']
+"   " let g:neomake_typescript_tslint_args = ['--fix']
+
+"   " flow fix
+"   " call dein#add('benjie/neomake-local-eslint.vim')
+" " }}}
 call dein#add('zhaocai/GoldenView.Vim', {'on_map':['<Plug>ToggleGoldenViewAutoResize']}) "{{{
   let g:goldenview__enable_default_mapping=0
 "}}}
@@ -182,9 +197,12 @@ call dein#add('jszakmeister/vim-togglecursor')
   map N <Plug>(is-N)zz
   map *  <Plug>(asterisk-z*)zz<Plug>(is-nohl-1)
   map g* <Plug>(asterisk-gz*)zz<Plug>(is-nohl-1)
+  " using comment on this
+  " map #  <Plug>(asterisk-z#)zz<Plug>(is-nohl-1)
+  " map g# <Plug>(asterisk-gz#)zz<Plug>(is-nohl-1)
 " }}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Git
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('airblade/vim-gitgutter') " {{{
@@ -204,12 +222,92 @@ call dein#add('tpope/vim-fugitive') "{{{
   autocmd BufReadPost fugitive://* set bufhidden=delete
 "}}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocomplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call dein#add('honza/vim-snippets')
+call dein#add('Shougo/neosnippet-snippets')
+call dein#add('Shougo/neosnippet') " {{{
+  set conceallevel=2 concealcursor=niv
+  let g:neosnippet#snippets_directory='~/.config/nvim/snippets'
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  imap <C-e> <Plug>(neosnippet_expand_or_jump)
+  smap <C-e> <Plug>(neosnippet_expand_or_jump)
+  xmap <C-e> <Plug>(neosnippet_expand_target)
+
+  inoremap <expr><TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ neosnippet#expandable_or_jumpable() ?
+    \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+  snoremap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+    \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+" }}}
+
+call dein#add('roxma/vim-hug-neovim-rpc')
+call dein#add('roxma/nvim-yarp')
+call dein#add('Shougo/deoplete.nvim') " {{{
+  let g:deoplete#enable_at_startup = 1
+
+  " initialize with empty, to use it later on per language
+  let g:deoplete#custom#var = {}
+
+  " set completeopt=longest,menuone,preview
+  "Amount of entries in completion popup
+" }}}
+call dein#add('Shougo/echodoc.vim') " {{{
+  set cmdheight=2
+  let g:echodoc_enable_at_startup = 1
+" }}}
+
+
+
+" ================================================================================================
+" call dein#add('autozimu/LanguageClient-neovim', {
+"     \ 'rev': 'next',
+"     \ 'build': './install.sh',
+"     \ })
+
+" let purescriptConfigWrapper =
+"     \ { 'purescript':
+"     \   { 'autoStartPscIde': v:true
+"     \   , 'pscIdePort': v:null
+"     \   , 'addSpagoSources': v:true
+"     \   , 'autocompleteAddImport': v:true
+"     \   , 'pursExe': 'purs'
+"     \   , 'addNpmPath': v:true
+"     \   , 'buildCommand': 'spago --config app/spago.dhall build -- --json-errors'
+"     \   }
+"     \ }
+
+" let g:LanguageClient_serverCommands = {
+"     \ 'haskell':    ['hls', '--lsp'],
+"     \ 'javascript': ['javascript-typescript-stdio'],
+"     \ 'typescript': ['javascript-typescript-stdio'],
+"     \ 'purescript': ['purescript-language-server', '--stdio', '--config', json_encode(purescriptConfigWrapper)]
+"     \ }
+"     " \ 'nix': ['nix-lsp'],
+
+" let g:LanguageClient_rootMarkers = {
+"     \ 'javascript': ['project.json'],
+"     \ 'rust': ['Cargo.toml'],
+"     \ 'purescript': ['bower.json', 'psc-package.json', 'spago.dhall'],
+"     \ }
+
+" autocmd filetype purescript setlocal omnifunc=LanguageClient#complete
+
+" " Automatically start language servers.
+" let g:LanguageClient_autoStart = 1
+" let g:LanguageClient_diagnosticsList = "Disabled" " fix error with easy-grep
+
+" " support for haskell-ide-engine errors (e.g. underline errors)
+" hi link ALEError Error
+" hi Warning term=underline cterm=underline ctermfg=Yellow gui=undercurl guisp=Gold
+" hi link ALEWarning Warning
+" hi link ALEInfo SpellCap
+" ================================================================================================
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tmux
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('christoomey/vim-tmux-navigator')
@@ -228,24 +326,24 @@ if $TMUX != ''
   " }}}
 
   " tmux status line
-  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
-  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
-
   " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark
   " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark
+
+  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
+  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
 
   " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline
   " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline
 
   call dein#add('edkolev/tmuxline.vim') " {{{
-    let g:tmuxline_theme = 'dracula'
     " let g:tmuxline_theme = 'gruvbox'
+    let g:tmuxline_theme = 'dracula'
     " let g:tmuxline_theme = 'iceberg'
     let g:tmuxline_preset = 'minimal'
   " }}}
 endif
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Editing
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('editorconfig/editorconfig-vim', {'on_i':1})
@@ -322,11 +420,17 @@ call dein#add('romgrk/replace.vim') " {{{
   nmap RR cc<C-R>+<esc>
 " }}}
 
-call dein#add('AndrewRadev/deleft.vim')
+call dein#add('AndrewRadev/deleft.vim') " mapping - dh
+" call dein#add('triglav/vim-visual-increment') " use CTRL+A/X to create increasing sequence of numbers or letters via visual mode
+" vmap <C-S> <Plug>VisualDecrement
+" vmap <C-X> <Plug>VisualIncrement
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Navigation
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"call dein#add('mileszs/ack.vim') "{{{
+"  let g:ackprg = "ag --nogroup --column --smart-case --follow"
+""}}}
 call dein#add('dkprice/vim-easygrep') "{{{
   let g:EasyGrepRecursive=1
   let g:EasyGrepAllOptionsInExplorer=1
@@ -364,6 +468,9 @@ call dein#add('scrooloose/nerdtree', {'on_cmd':['NERDTreeToggle','NERDTreeFind']
   nnoremap <F3> :NERDTreeFind<CR>
 "}}}
 
+"call dein#add('majutsushi/tagbar', {'on_cmd':'TagbarToggle'}) "{{{
+"  nnoremap <silent> <F9> :TagbarToggle<CR>
+""}}}
 call dein#add('kshenoy/vim-signature')
 call dein#add('myusuf3/numbers.vim') " {{{
   nnoremap <silent> <F7> :NumbersToggle<cr>
@@ -391,9 +498,21 @@ call dein#add('mhinz/vim-sayonara') " {{{
   nnoremap <leader>z :qa!<cr>
 " }}}
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" " http://ctrlpvim.github.io/ctrlp.vim/#installation
+" Press <F5> to purge the cache for the current directory to get new files, remove deleted files and apply new ignore options.
+" Press <c-f> and <c-b> to cycle between modes.
+" Press <c-d> to switch to filename search instead of full path.
+" Press <c-r> to switch to regexp mode.
+" Use <c-j>, <c-k> or the arrow keys to navigate the result list.
+" Use <c-t> or <c-v>, <c-x> to open the selected entry in a new tab or in a new split.
+" Use <c-n>, <c-p> to select the next/previous string in the prompt's history.
+" Use <c-y> to create a new file and its parent directories.
+" Use <c-z> to mark/unmark multiple files and <c-o> to open them.
+
 call dein#add('ctrlpvim/ctrlp.vim')
 let g:ctrlp_map = '<Space><Space>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -409,7 +528,7 @@ let g:ctrlp_custom_ignore = {
 
 let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Textobj
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('kana/vim-textobj-user')
@@ -452,28 +571,106 @@ autocmd FileType html,vue,xml,xsl,xslt,xsd,css,sass,scss,less,mustache,handlebar
 " Attribute deletion
 autocmd FileType html,vue,xml,xsl,xslt,xsd,css,sass,scss,less,mustache,handlebars,ts,javascript,jsx,typescript,eruby nm dA lF d2f"
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Javascript
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call dein#add('kchmck/vim-coffee-script', {'on_ft':['coffee']})
-call dein#add('leshill/vim-json', {'on_ft':['json']})
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call dein#add('maxmellon/vim-jsx-pretty', {'on_ft':['javascript', 'javascriptreact', 'typescriptreact']})
+call dein#add('othree/yajs.vim')
+call dein#add('kchmck/vim-coffee-script', {'on_ft':['coffee']})
+call dein#add('mmalecki/vim-node.js', {'on_ft':['javascript']})
+call dein#add('leshill/vim-json', {'on_ft':['javascript','json']})
+call dein#add('othree/javascript-libraries-syntax.vim', {'on_ft':['javascript','coffee','ls','typescript']})
+call dein#add('heavenshell/vim-jsdoc', {'on_ft':['javascript','typescript']})
+
+let g:used_javascript_libs = 'underscore,ramda,react'
+
+" typescript
+" call dein#add('mhartington/nvim-typescript', { 'on_ft':['typescript'] })
+call dein#add('leafgarland/typescript-vim', { 'on_ft':['typescript'] })
+
+" flow
+" call dein#add('flowtype/vim-flow', { 'on_ft':['javascript'] })
+
+" vue
+" call dein#add('posva/vim-vue')
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ruby
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('tpope/vim-rails', {'on_ft':['ruby']})
+call dein#add('vim-ruby/vim-ruby', {'on_ft':['ruby']})
 call dein#add('rhysd/vim-textobj-ruby', {'on_ft':['ruby']})
+call dein#add('fishbullet/deoplete-ruby', {'on_ft':['ruby']})
+" call dein#add('thoughtbot/vim-rspec', {'on_ft':['ruby']})
 
+let neosimpp_path = '~/.config/nvim/bundle/repos/github.com/Shougo/neosnippet-snippets/neosnippets/'
+exec "au BufNewFile,BufRead Gemfile NeoSnippetSource ".neosimpp_path."Gemfile.snip"
+exec "au BufNewFile,BufRead *.rb NeoSnippetSource ".neosimpp_path."rails.snip"
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Elm
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('ElmCast/elm-vim', {'on_ft':['elm']}) " {{{
+"   let g:elm_format_autosave = 1
+"   let g:elm_setup_keybindings = 0 " use bindings from ftplugin/elm.vim
+
+"   let g:syntastic_always_populate_loc_list = 1
+"   let g:syntastic_auto_loc_list = 1
+"   let g:elm_syntastic_show_warnings = 1
+
+"   " let g:deoplete#omni#functions.elm = ['elm#Complete']
+"   " let g:deoplete#custom#var.elm = '[^ \t]+'
+"   " let g:deoplete#sources.elm = ['omni'] + g:deoplete#sources._
+" " }}}
+" call dein#add('pbogut/deoplete-elm', {'on_ft':['elm']})
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Idris
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call dein#add('idris-hackers/idris-vim', { 'on_ft':['idris'] })
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Python
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call dein#add('deoplete-plugins/deoplete-jedi', {'on_ft':['python']})
+call dein#add('vim-python/python-syntax', {'on_ft':['python']})
+let g:python_highlight_all = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Haskell
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('eagletmt/neco-ghc')
+call dein#add('neovimhaskell/haskell-vim', {'on_ft':['haskell']})
+let g:haskell_classic_highlighting = 1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => C#
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('Robzz/deoplete-omnisharp', { 'on_ft':['cs'] })
+" call dein#add('OmniSharp/omnisharp-vim', { 'on_ft':['cs'] })
+" let g:deoplete#omni#functions = {}
+" let g:deoplete#omni#functions.cs = 'OmniSharp#Complete'
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Purescript
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('purescript-contrib/purescript-vim', { 'on_ft':['purescript'] })
+call dein#add('FrigoEU/psc-ide-vim', { 'on_ft':['purescript'] })
 call dein#add('srghma/vim-purs-module-name', { 'on_ft':['purescript'] })
+" let g:psc_ide_log_level=4
 
+" checking in file
+let g:deoplete#custom#var.purescript = '[^. *\t]'
+let g:deoplete#custom#var.purescript = '[.\w]+'
+" checking wia `pulp -w build` (faster)
+" let g:psc_ide_syntastic_mode = 0
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('kana/vim-vspec') " Testing framework
+
 call dein#add('aklt/plantuml-syntax',         {'on_ft':['plantuml']})
 call dein#add('jparise/vim-graphql',          {'on_ft':['graphql']})
 call dein#add('tpope/vim-scriptease',         {'on_ft':['vim']})
@@ -487,7 +684,44 @@ call dein#add('LnL7/vim-nix',                 {'on_ft':['nix']})
 call dein#add('derekelkins/agda-vim',         {'on_ft':['agda']})
 call dein#add('vmchale/dhall-vim',            {'on_ft':['dhall']})
 
+" call dein#add('takac/vim-hardtime') " {{{
+"   let g:hardtime_default_on = 1
+"   let g:hardtime_allow_different_key = 1
+"   let g:hardtime_maxcount = 2
+
+"   " doesnt work with wb actually
+"   let s:hardtime_abandoned_keys = ["h", "j", "k", "l", "-", "+", "W", "B"]
+"   let g:list_of_normal_keys = s:hardtime_abandoned_keys
+"   let g:list_of_visual_keys = s:hardtime_abandoned_keys
+
+"   " let g:hardtime_ignore_buffer_patterns = [".*fugitive.*", "[unite].*"]
+" " }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Documets editing
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('maksimr/vim-translator')
+" call dein#add('suan/vim-instant-markdown')
+
+" autocmd InsertEnter * silent! !xkbcomp $HOME/.config/layouts/ua $DISPLAY  > /dev/null 2&>1
+" autocmd InsertLeave * silent! !xkbcomp $HOME/.config/layouts/en_ru $DISPLAY > /dev/null 2&>1
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => GUI
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" call dein#add('tpope/vim-dispatch') " {{{
+"   " call dein#add('radenling/vim-dispatch-neovim')
+"   nnoremap <leader>rd :Dispatch<space>
+"   nnoremap <leader>rD :Copen<CR>
+
+"   " open file under cursor in window above
+"   nmap <leader>gf yif<C-k>:e <M-p><CR>
+" }}}
+" call dein#add('bramblex/ranger.vim', { 'depends': 'rbgrouleff/bclose.vim' }) " {{{
+"   let g:ranger_path='SHELL=/home/srghma/.config/ranger/rshell ranger --cmd "set colorscheme snow"'
+" " }}}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 nnoremap <M-8> #
@@ -639,79 +873,24 @@ function! RemoveNonascii() abort
   exe "normal! :s:\ \|(\|)\|\.::g"
 endfunction
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Finish
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 call dein#add('dracula/vim', { 'name': 'dracula' }) "{{{
-  let g:dracula_colorterm = 1
+  " let g:dracula_colorterm = 1
   let g:dracula_italic = 1
   if (has("termguicolors"))
     set termguicolors
   endif
 "}}}
+
+call dein#add('nanotech/jellybeans.vim')
 call dein#add('morhetz/gruvbox') "{{{
   let g:gruvbox_contrast_dark = 'medium'
 "}}}
-call dein#add('nanotech/jellybeans.vim')
 call dein#add('ryanoasis/vim-devicons')
 
-" =====================================================================
-call dein#add('neoclide/coc.nvim', { 'merged': 0, 'rev': 'release' }) "{{{
-  let g:coc_global_extensions = [
-        \'coc-json',
-        \'coc-snippets',
-        \'coc-html',
-        \'coc-eslint',
-        \'coc-yaml',
-        \'coc-tsserver',
-        \'coc-solargraph',
-        \'coc-jedi',
-        \'coc-htmldjango',
-        \'coc-docker',
-        \'coc-css',
-        \'@yaegassy/coc-tailwindcss3',
-  \]
-
-  set hidden
-  set nobackup
-  set nowritebackup
-  set cmdheight=2
-  set updatetime=300
-  set shortmess+=c
-  set signcolumn=number
-
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ CheckBackspace() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-  function! CheckBackspace() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  imap <C-l> <Plug>(coc-snippets-expand)
-  vmap <C-j> <Plug>(coc-snippets-select)
-  let g:coc_snippet_next = '<c-j>'
-  let g:coc_snippet_prev = '<c-k>'
-  imap <C-j> <Plug>(coc-snippets-expand-jump)
-  xmap <leader>x  <Plug>(coc-convert-snippet)
-
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-
-  augroup mygroup
-    autocmd!
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-  augroup end
-" }}}
-
-call dein#add('nvim-treesitter/nvim-treesitter', {'do': 'TSUpdate'})
-call dein#add('nvim-treesitter/playground')
-
-" =====================================================================
 
 call dein#end()
 
@@ -720,30 +899,6 @@ if dein#check_install()
 endif
 
 autocmd VimEnter * call dein#call_hook('post_source')
-
-" =====================================================================
-lua <<EOF
-  require("nvim-treesitter.configs").setup {
-    ensure_installed = {
-      "python",
-      "javascript",
-      "typescript",
-      "tsx",
-      "haskell",
-      "cpp",
-      "ruby",
-    },
-    highlight = {
-      enable = true,
-      disable = {},
-      additional_vim_regex_highlighting = false,
-    },
-    playground = {
-      enable = true,
-    }
-  }
-EOF
-" =====================================================================
 
 filetype plugin indent on
 syntax enable
@@ -783,7 +938,6 @@ autocmd BufRead,BufNewFile Dockerfile.template set filetype=dockerfile
 autocmd BufRead,BufNewFile *.js.erb set filetype=javascript
 autocmd BufRead,BufNewFile *.mjml set filetype=slim
 autocmd BufRead,BufNewFile *.purs set filetype=purescript
-autocmd BufRead,BufNewFile *.dhall set filetype=dhall
 autocmd BufRead,BufNewFile *.slim set filetype=slim
 autocmd BufRead,BufNewFile Vagrantfile,Guardfile set filetype=ruby
 autocmd BufRead,BufNewFile emacs,spaceemacs set filetype=lisp

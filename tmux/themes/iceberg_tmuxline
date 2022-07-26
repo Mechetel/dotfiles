@@ -18,7 +18,7 @@ setw -g window-status-style fg="colour74",bg="colour236",none
 setw -g window-status-activity-style fg="colour255",bg="colour236",none
 setw -g window-status-separator ""
 set -g status-left "#[fg=colour59,bg=colour74] #S #[fg=colour74,bg=colour236,nobold,nounderscore,noitalics]"
-# set -g status-right "#[fg=colour74,bg=colour236,nobold,nounderscore,noitalics]#[fg=colour59,bg=colour74] %R "
+# set -g status-right "#[fg=colour74,bg=colour236,nobold,nounderscore,noitalics]x#[fg=colour59,bg=colour74] %R "
 set -g status-right ""
 setw -g window-status-format "#[fg=colour236,bg=colour236,nobold,nounderscore,noitalics]#[default] #I #W #[fg=colour236,bg=colour236,nobold,nounderscore,noitalics]"
 setw -g window-status-current-format "#[fg=colour236,bg=colour59,nobold,nounderscore,noitalics]#[fg=colour153,bg=colour59] #I #W #[fg=colour59,bg=colour236,nobold,nounderscore,noitalics]"

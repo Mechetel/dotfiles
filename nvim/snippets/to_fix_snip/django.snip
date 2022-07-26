@@ -1,0 +1,138 @@
+# Model Fields
+
+# Note: Optional arguments are using defaults that match what Django will use
+# as a default, e.g. with max_length fields.  Doing this as a form of self
+# documentation and to make it easy to know whether you should override the
+# default or not.
+
+# Note: Optional arguments that are booleans will use the opposite since you
+# can either not specify them, or override them, e.g. auto_now_add=False.
+
+snippet auto
+abbr    Django_auto
+	${1:FIELDNAME} = models.AutoField(${0})
+snippet bigint
+abbr    Django_bigint
+	${1:FIELDNAME} = models.BigIntegerField(${0})
+snippet binary
+abbr    Django_binary
+	${1:FIELDNAME} = models.BinaryField(${0})
+snippet bool
+abbr    Django_bool
+	${1:FIELDNAME} = models.BooleanField(${0:default=True})
+snippet char
+abbr    Django_char
+	${1:FIELDNAME} = models.CharField(max_length=${2}${0:, blank=True})
+snippet comma
+abbr    Django_comma
+	${1:FIELDNAME} = models.CommaSeparatedIntegerField(max_length=${2}${0:, blank=True})
+snippet date
+abbr    Django_date
+	${1:FIELDNAME} = models.DateField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+snippet datetime
+abbr    Django_datetime
+	${1:FIELDNAME} = models.DateTimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+snippet decimal
+abbr    Django_decimal
+	${1:FIELDNAME} = models.DecimalField(max_digits=${2}, decimal_places=${0})
+snippet email
+abbr    Django_email
+	${1:FIELDNAME} = models.EmailField(max_length=${2:75}${0:, blank=True})
+snippet file
+abbr    Django_file
+	${1:FIELDNAME} = models.FileField(upload_to=${2:path/for/upload}${0:, max_length=100})
+snippet filepath
+abbr    Django_filepath
+	${1:FIELDNAME} = models.FilePathField(path=${2:"/abs/path/to/dir"}${3:, max_length=100}${4:, match="*.ext"}${5:, recursive=True}${0:, blank=True, })
+snippet float
+abbr    Django_float
+	${1:FIELDNAME} = models.FloatField(${0})
+snippet image
+abbr    Django_image
+	${1:FIELDNAME} = models.ImageField(upload_to=${2:path/for/upload}${3:, height_field=height, width_field=width}${0:, max_length=100})
+snippet int
+abbr    Django_int
+	${1:FIELDNAME} = models.IntegerField(${0})
+snippet ip
+abbr    Django_ip
+	${1:FIELDNAME} = models.IPAddressField(${0})
+snippet nullbool
+abbr    Django_nullbool
+	${1:FIELDNAME} = models.NullBooleanField(${0})
+snippet posint
+abbr    Django_posint
+	${1:FIELDNAME} = models.PositiveIntegerField(${0})
+snippet possmallint
+abbr    Django_possmallint
+	${1:FIELDNAME} = models.PositiveSmallIntegerField(${0})
+snippet slug
+abbr    Django_slug
+	${1:FIELDNAME} = models.SlugField(max_length=${2:50}${0:, blank=True})
+snippet smallint
+abbr    Django_smallint
+	${1:FIELDNAME} = models.SmallIntegerField(${0})
+snippet text
+abbr    Django_text
+	${1:FIELDNAME} = models.TextField(${0:blank=True})
+snippet time
+abbr    Django_time
+	${1:FIELDNAME} = models.TimeField(${2:auto_now_add=True, auto_now=True}${0:, blank=True, null=True})
+snippet url
+abbr    Django_url
+	${1:FIELDNAME} = models.URLField(${2:verify_exists=False}${3:, max_length=200}${0:, blank=True})
+snippet xml
+abbr    Django_xml
+	${1:FIELDNAME} = models.XMLField(schema_path=${2:None}${0:, blank=True})
+# Relational Fields
+snippet fk
+abbr    Django_fk
+	${1:FIELDNAME} = models.ForeignKey(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${0:, to_field=''})
+snippet m2m
+abbr    Django_m2m
+	${1:FIELDNAME} = models.ManyToManyField(${2:OtherModel}${3:, related_name=''}${4:, limit_choices_to=}${5:, symmetrical=False}${6:, through=''}${0:, db_table=''})
+snippet o2o
+abbr    Django_o2o
+	${1:FIELDNAME} = models.OneToOneField(${2:OtherModel}${3:, parent_link=True}${4:, related_name=''}${5:, limit_choices_to=}${0:, to_field=''})
+
+# Code Skeletons
+
+snippet form
+	class ${1:FormName}(forms.Form):
+		${0}
+
+snippet model
+	class ${1:ModelName}(models.Model):
+		${3}
+
+		class Meta:
+			${4}
+
+		def __unicode__(self):
+			${5}
+
+		def save(self, *args, **kwargs):
+			${6}
+
+		@models.permalink
+		def get_absolute_url(self):
+			return ('${7:view_or_url_name}' ${0})
+
+snippet modeladmin
+	class ${1:ModelName}Admin(admin.ModelAdmin):
+		${0}
+
+	admin.site.register($1, $1Admin)
+
+snippet tabularinline
+	class ${0:ModelName}Inline(admin.TabularInline):
+		model = $1
+
+snippet stackedinline
+	class ${0:ModelName}Inline(admin.StackedInline):
+		model = $1
+
+snippet r2r
+	return render_to_response('${1:template.html}', {
+			${2}
+		}${0:, context_instance=RequestContext(request)}
+	)

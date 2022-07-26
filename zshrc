@@ -5,18 +5,33 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 # If you come from bash you might have to change your $PATH.
-export PATH="/usr/local/sbin:$PATH"
-export PATH="$HOME/bin:/usr/local/bin:$PATH"
-export PATH="$HOME/.node_modules/bin:$PATH"
-export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+
+#add python3 from brew
+export PATH="/usr/local/opt/python@3.10/libexec/bin:$PATH"
+
+# Add node modules
+export PATH="$PATH:$HOME/.node_modules/bin"
 
 # this is for haskell
-# export PATH="$HOME/.local/bin:$PATH"
+export PATH="$PATH:$HOME/.local/bin"
+
+# apps important paths
+export PATH="$PATH:/Library/Apple/usr/bin"
+export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
+
+# Add anaconda to path before python@3.10
+# export PATH="/opt/anaconda3/bin:$PATH"
+# export PATH="/opt/anaconda3/condabin:$PATH"
+
+# Add anaconda to path after python@3.10
+export PATH="$PATH:/opt/anaconda3/bin"
+export PATH="$PATH:/opt/anaconda3/condabin"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/dmitryhoma/.oh-my-zsh"
-export EDITOR=/usr/local/bin/nvim
-export VISUAL=/usr/local/bin/nvim
+export EDITOR="/usr/local/bin/nvim"
+export VISUAL="/usr/local/bin/nvim"
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -70,7 +85,7 @@ PROJECT_PATHS=($HOME/Projects)
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
@@ -82,3 +97,15 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
+
+# ruby which is instelled by brew <<<<< on the SECOND PATH
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+# =================== RUBY RVM =======================
+export PATH="$MY_RUBY_HOME/bin:$PATH"
+export PATH="$GEM_PATH/bin:$PATH"
+export PATH="$GEM_HOME/bin:$PATH"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"

@@ -1,0 +1,219 @@
+snippet ir
+abbr    import React
+  import React from 'react';
+
+snippet irc
+abbr    import React and Component
+  import React, { Component } from 'react';
+
+snippet irh
+abbr    import React hooks
+  import { use$1 } from 'react';
+
+snippet ird
+abbr    import ReactDOM
+  import ReactDOM from 'react-dom';
+
+snippet irp
+abbr    import PropTypes
+  import PropTypes from 'prop-types';
+
+# Lifecycle Methods
+snippet cdm
+abbr    componentDidMount
+  componentDidMount() {
+    ${1}
+  };
+
+snippet cdup
+abbr    componentDidUpdate
+  componentDidUpdate(prevProps, prevState) {
+    ${1}
+  };
+
+snippet cwm
+abbr    componentWillMount
+  componentWillMount() {
+    ${1}
+  };
+
+snippet cwr
+abbr    componentWillReceiveProps
+  componentWillReceiveProps(nextProps) {
+    ${1}
+  };
+
+snippet cwun
+abbr    componentWillUnmount
+  componentWillUnmount() {
+    ${1}
+  };
+
+snippet cwu
+abbr    componentWillUpdate
+  componentWillUpdate(nextProps, nextState) {
+    ${1}
+  };
+
+snippet scu
+abbr    shouldComponentUpdate
+  shouldComponentUpdate(nextProps, nextState) {
+    ${1}
+  }
+
+# Props
+snippet spt
+abbr    static propTypes
+  static propTypes = {
+    ${1}: PropTypes.${2}
+  };
+
+snippet pt
+abbr    propTypes
+  ${1}.propTypes = {
+    ${2}: PropTypes.${2}
+  };
+
+snippet sdp
+abbr    static defaultProps
+  static defaultProps = {
+    ${1}: ${2}
+  };
+
+snippet dp
+abbr    defaultProps
+  ${1}.defaultProps = {
+    ${2}: ${3}
+  };
+
+snippet pp
+abbr    props
+  props.${1};
+
+snippet tp
+abbr    this props
+  this.props.${1};
+
+# State
+snippet st
+  state = {
+    ${1}: ${2},
+  };
+
+snippet sst
+  this.setState({
+    ${1}: ${2}
+  });
+
+snippet tst
+  this.state.${1};
+
+# Component
+snippet raf
+  const ${1:ComponentName} = (${2:props}) => {
+    ${3:state}
+
+    return (
+      <>
+        ${4}
+      </>
+    );
+  };
+
+snippet rcla
+  class ${1:ClassName} extends Component {
+    render() {
+      return (
+        <>
+          ${2}
+        </>
+      );
+    }
+  }
+
+snippet ercla
+  export default class ${1:ClassName} extends Component {
+    render() {
+      return (
+        <>
+          ${2}
+        </>
+      );
+    };
+  };
+
+snippet ctor
+  constructor() {
+    super();
+
+    ${1:state}
+  }
+
+snippet ren
+  render() {
+    return (
+      <>
+        ${2}
+      </>
+    );
+  }
+
+snippet fup
+  forceUpdate(${1:callback});
+
+# Hooks
+snippet uses
+abbr    useState
+  const [${1:state}, set${2}] = useState(${3:initialState});
+
+snippet usee
+abbr    useEffect
+  useEffect(() => {
+    ${1}
+  });
+
+snippet userd
+abbr    useReducer
+  const [${1:state}, ${2:dispatch}] = useReducer(${3:reducer});
+
+snippet userf
+abbr    useRef
+  const ${1:refContainer} = useRef(${2:initialValue});
+
+snippet usect
+abbr    useContext
+  const ${1:value} = useContext(${2:MyContext});
+
+snippet usecb
+abbr    useCallback
+  const ${1:memoizedCallback} = useCallback(
+  () => {
+    ${2}(${3})
+  },
+  [$3]
+  );
+
+snippet usem
+abbr    useMemo
+  const ${1:memoizedCallback} = useMemo(() => ${2}(${3}), [$3]);
+
+snippet usei
+abbr    useImperativeHandle
+  useImperativeHandle(${1:ref}, ${2:createHandle});
+
+snippet used
+abbr    useDebugValue
+  useDebugValue(${1:value});
+
+# ReactDOM methods
+snippet rdr
+abbr    ReactDOM.render
+  ReactDOM.render(${1}, ${2});
+
+snippet rdh
+abbr    ReactDOM.hydrate
+  ReactDOM.hydrate(${1:element}, ${2:container}[, ${3:callback}]);
+
+snippet rdcp
+abbr    ReactDOM.createPortal
+  ReactDOM.createPortal(${1:child}, ${2:container});
