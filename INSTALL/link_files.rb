@@ -30,5 +30,5 @@ inhome_indotfiles.each do |(inhome, indotfiles)|
   inhome_     = File.join $home, inhome
   indotfiles_ = File.join $dotfiles, indotfiles
   `mkdir -p "$(dirname "#{inhome_}")"`
-  `ln -sf "#{indotfiles_}" "#{inhome_}"`
+  `sudo ln -sf "#{indotfiles_}" "#{inhome_}"`
 end

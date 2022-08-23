@@ -228,14 +228,14 @@ if $TMUX != ''
   " }}}
 
   " tmux status line
-  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
-  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline
+  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
+  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
 
-  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark
-  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark
+  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
+  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
 
-  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline
-  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline
+  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline.conf
+  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline.conf
 
   call dein#add('edkolev/tmuxline.vim') " {{{
     let g:tmuxline_theme = 'dracula'
@@ -651,7 +651,7 @@ call dein#add('dracula/vim', { 'name': 'dracula' }) "{{{
   endif
 "}}}
 call dein#add('morhetz/gruvbox') "{{{
-  let g:gruvbox_contrast_dark = 'medium'
+  let g:gruvbox_contrast_dark = 'hard'
 "}}}
 call dein#add('nanotech/jellybeans.vim')
 call dein#add('ryanoasis/vim-devicons')
@@ -752,9 +752,9 @@ set background=dark   " Setting dark mode
 " set background=light   " Setting light mode
 
 
-colorscheme dracula
+" colorscheme dracula
 " colorscheme jellybeans
-" colorscheme gruvbox
+colorscheme gruvbox
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocommands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
