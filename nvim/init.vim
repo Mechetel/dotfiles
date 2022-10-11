@@ -228,11 +228,11 @@ if $TMUX != ''
   " }}}
 
   " tmux status line
-  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
-  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
+  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
+  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/dracula_tmuxline_new.conf
 
-  autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
-  autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
+  " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
+  " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/tmux-gruvbox-dark.conf
 
   " autocmd VimEnter * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline.conf
   " autocmd VimLeave * silent! !tmux source ~/.dotfiles/tmux/themes/iceberg_tmuxline.conf
@@ -752,9 +752,9 @@ set background=dark   " Setting dark mode
 " set background=light   " Setting light mode
 
 
-" colorscheme dracula
+colorscheme dracula
 " colorscheme jellybeans
-colorscheme gruvbox
+" colorscheme gruvbox
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Autocommands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
