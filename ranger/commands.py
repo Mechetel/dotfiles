@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file is part of ranger, the console file manager.
 # This configuration file is licensed under the same terms as ranger.
+
 # ===================================================================
 #
 # NOTE: If you copied this file to ~/.config/ranger/commands_full.py,

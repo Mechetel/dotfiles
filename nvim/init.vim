@@ -115,6 +115,8 @@ endfunction "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Core
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call dein#add('github/copilot.vim')
+
 call dein#add('vim-scripts/matchit.zip')
 call dein#add('vim-airline/vim-airline') "{{{
   let g:airline_powerline_fonts = 1
@@ -133,9 +135,18 @@ call dein#add('vim-airline/vim-airline') "{{{
   nmap <leader>8 <Plug>AirlineSelectTab8
   nmap <leader>9 <Plug>AirlineSelectTab9
 "}}}
-"
+
+call dein#add('nvim-tree/nvim-web-devicons')
+call dein#add('nvim-lua/plenary.nvim')
+call dein#add('nvim-telescope/telescope.nvim', { 'rev': '0.1.2' })
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 call dein#add('prettier/vim-prettier', {'build': 'npm install'})
 call dein#add('tpope/vim-surround')
+call dein#add('alvan/vim-closetag')
 autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('=')} = "<%= \r %>"
 autocmd BufNewFile,BufRead *.html.erb let b:surround_{char2nr('-')} = "<% \r %>"
 
@@ -394,6 +405,7 @@ call dein#add('mhinz/vim-sayonara') " {{{
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Unite
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 call dein#add('ctrlpvim/ctrlp.vim')
 let g:ctrlp_map = '<Space><Space>'
 let g:ctrlp_cmd = 'CtrlP'
@@ -462,6 +474,7 @@ call dein#add('leshill/vim-json', {'on_ft':['json']})
 " => Ruby
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('tpope/vim-rails', {'on_ft':['ruby']})
+call dein#add('vim-ruby/vim-ruby', {'on_ft':['ruby']})
 call dein#add('rhysd/vim-textobj-ruby', {'on_ft':['ruby']})
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -469,7 +482,6 @@ call dein#add('rhysd/vim-textobj-ruby', {'on_ft':['ruby']})
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('purescript-contrib/purescript-vim', { 'on_ft':['purescript'] })
 call dein#add('srghma/vim-purs-module-name', { 'on_ft':['purescript'] })
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Misc
@@ -629,6 +641,15 @@ tnoremap <right> <C-\><C-n>:bnext<CR>
 tnoremap <up> <C-\><C-n>:tabnext<CR>
 tnoremap <down> <C-\><C-n>:tabprev<CR>
 
+"Ctrl+Shift+up move line above"
+"Ctrl+Shift+down move line below
+nnoremap <C-S-Down> :m+<CR>==
+nnoremap <C-S-Up> :m-2<CR>==
+inoremap <C-S-Down> <Esc>:m+<CR>==gi
+inoremap <C-S-Up> <Esc>:m-2<CR>==gi
+vnoremap <C-S-Down> :m'>+<CR>gv=gv
+vnoremap <C-S-Up> :m-2<CR>gv=gv
+
 " J and K like in nerdtree
 map K <Plug>(IndentWiseBlockScopeBoundaryBegin)
 map J <Plug>(IndentWiseBlockScopeBoundaryEnd)
@@ -655,12 +676,13 @@ call dein#add('morhetz/gruvbox') "{{{
 "}}}
 call dein#add('nanotech/jellybeans.vim')
 call dein#add('ryanoasis/vim-devicons')
+call dein#add('catppuccin/nvim', { 'name': 'catppuccin' })
 
 " =====================================================================
 call dein#add('neoclide/coc.nvim', { 'merged': 0, 'rev': 'release' }) "{{{
   let g:coc_global_extensions = [
-        \'coc-json',
         \'coc-snippets',
+        \'coc-json',
         \'coc-html',
         \'coc-eslint',
         \'coc-yaml',
@@ -670,7 +692,7 @@ call dein#add('neoclide/coc.nvim', { 'merged': 0, 'rev': 'release' }) "{{{
         \'coc-htmldjango',
         \'coc-docker',
         \'coc-css',
-        \'@yaegassy/coc-tailwindcss3',
+        \'@yaegassy/coc-tailwindcss3'
   \]
 
   set hidden
@@ -682,10 +704,13 @@ call dein#add('neoclide/coc.nvim', { 'merged': 0, 'rev': 'release' }) "{{{
   set signcolumn=number
 
   inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ CheckBackspace() ? "\<TAB>" :
+        \ coc#pum#visible() ? coc#pum#next(1) :
+        \ CheckBackspace() ? "\<Tab>" :
         \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
   function! CheckBackspace() abort
     let col = col('.') - 1
@@ -719,19 +744,23 @@ if dein#check_install()
   call dein#install()
 endif
 
+call coc#config('snippets.extends', { 'cpp' : ['c'], 'javascriptreact' : ['javascript'], 'typescript' : ['javascript'], 'ruby' : ['rails'] })
+
 autocmd VimEnter * call dein#call_hook('post_source')
 
-" =====================================================================
-lua <<EOF
-  require("nvim-treesitter.configs").setup {
+lua << EOF
+  require'nvim-treesitter.configs'.setup {
     ensure_installed = {
+      "c",
+      "lua",
+      "vim",
       "python",
       "javascript",
       "typescript",
       "tsx",
       "haskell",
       "cpp",
-      "ruby",
+      "ruby"
     },
     highlight = {
       enable = true,
@@ -743,7 +772,6 @@ lua <<EOF
     }
   }
 EOF
-" =====================================================================
 
 filetype plugin indent on
 syntax enable
@@ -753,6 +781,7 @@ set background=dark   " Setting dark mode
 
 
 colorscheme dracula
+" colorscheme catppuccin
 " colorscheme jellybeans
 " colorscheme gruvbox
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

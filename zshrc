@@ -4,6 +4,7 @@
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
 # If you come from bash you might have to change your $PATH.
 export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
@@ -14,19 +15,21 @@ export PATH="/usr/local/opt/python@3.10/libexec/bin:$PATH"
 export PATH="$PATH:$HOME/.node_modules/bin"
 
 # this is for haskell
+export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.2.7/bin"
+export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.4.4/bin"
 export PATH="$PATH:$HOME/.local/bin"
 
 # apps important paths
 export PATH="$PATH:/Library/Apple/usr/bin"
+export PATH="$PATH:/System/Cryptexes/App/usr/bin"
 export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
 
-# Add anaconda to path before python@3.10
-# export PATH="/opt/anaconda3/bin:$PATH"
-# export PATH="/opt/anaconda3/condabin:$PATH"
+# OpenJDK for elasticsearch # deprecated
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
-# Add anaconda to path after python@3.10
-export PATH="$PATH:/opt/anaconda3/bin"
-export PATH="$PATH:/opt/anaconda3/condabin"
+# elasticsearch and kibana
+export PATH="$PATH:$HOME/.elasticsearch/bin"
+export PATH="$PATH:$HOME/.kibana/bin"
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/dmitryhoma/.oh-my-zsh"
@@ -85,21 +88,33 @@ PROJECT_PATHS=($HOME/Projects)
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('/Users/dmitryhoma/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/opt/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh"
     else
-        export PATH="/opt/anaconda3/bin:$PATH"
+        export PATH="/Users/dmitryhoma/anaconda3/bin:$PATH"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh
+
 # ruby which is instelled by brew <<<<< on the SECOND PATH
+export PATH="/usr/local/opt/node@20/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+
+export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+
+rvm_auto_reload_flag=2
 
 # =================== RUBY RVM =======================
 export PATH="$MY_RUBY_HOME/bin:$PATH"
@@ -107,7 +122,7 @@ export PATH="$GEM_PATH/bin:$PATH"
 export PATH="$GEM_HOME/bin:$PATH"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/p10k.zsh.
