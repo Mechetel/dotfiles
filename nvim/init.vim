@@ -115,7 +115,10 @@ endfunction "}}}
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Core
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call dein#add('github/copilot.vim')
+call dein#add('github/copilot.vim') "{{{
+  imap <silent><script><expr> <C-e> copilot#Accept('\<CR>')
+  let g:copilot_no_tab_map = v:true
+"}}}
 
 call dein#add('vim-scripts/matchit.zip')
 call dein#add('vim-airline/vim-airline') "{{{
