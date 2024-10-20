@@ -1,3 +1,8 @@
+export LC_ALL=en_US.UTF-8
+export LC_CTYPE=en_US.UTF-8
+
+typeset -U PATH
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -6,7 +11,7 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # If you come from bash you might have to change your $PATH.
-export PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 #add python3 from brew
 export PATH="/usr/local/opt/python@3.10/libexec/bin:$PATH"
@@ -70,7 +75,6 @@ plugins=(
   ## docker
   docker
   docker-compose
-
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -106,6 +110,11 @@ source $(brew --prefix nvm)/nvm.sh
 
 # ruby which is instelled by brew <<<<< on the SECOND PATH
 export PATH="/usr/local/opt/node@20/bin:$PATH"
+# export PATH="/usr/local/opt/node@14/bin:$PATH"
+
+export PATH="/usr/local/opt/icu4c/bin:$PATH"
+export PATH="/usr/local/opt/icu4c/sbin:$PATH"
+
 export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
@@ -120,7 +129,13 @@ rvm_auto_reload_flag=2
 export PATH="$MY_RUBY_HOME/bin:$PATH"
 export PATH="$GEM_PATH/bin:$PATH"
 export PATH="$GEM_HOME/bin:$PATH"
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+
+if [[ -n $TMUX ]] && [[ "$(whence -w rvm)" == *"function"* ]]; then
+    rvm use default >/dev/null 2>&1 6>&1
+    cd .
+fi
 
 # # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
