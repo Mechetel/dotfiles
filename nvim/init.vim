@@ -3,6 +3,8 @@
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Initialize defaults
+language en_US
+
 "" Setup Shougo/dein.vim plugin manager
 if (!isdirectory(expand('$HOME/.config/nvim/bundle/repos/github.com/Shougo/dein.vim')))
     call system(expand('mkdir -p $HOME/.config/nvim/bundle/repos/github.com'))
