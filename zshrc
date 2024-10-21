@@ -20,8 +20,7 @@ export PATH="/usr/local/opt/python@3.10/libexec/bin:$PATH"
 export PATH="$PATH:$HOME/.node_modules/bin"
 
 # this is for haskell
-export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.2.7/bin"
-export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.4.4/bin"
+export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.10.1/bin"
 export PATH="$PATH:$HOME/.local/bin"
 
 # apps important paths
