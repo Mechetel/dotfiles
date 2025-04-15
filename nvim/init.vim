@@ -124,6 +124,7 @@ call dein#add('github/copilot.vim') "{{{
 
 call dein#add('vim-scripts/matchit.zip')
 call dein#add('vim-airline/vim-airline') "{{{
+  " let g:airline_theme = 'catppuccin'
   let g:airline_powerline_fonts = 1
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#tabline#left_sep = ''
@@ -224,6 +225,17 @@ call dein#add('tpope/vim-fugitive') "{{{
 " => Autocomplete
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call dein#add('honza/vim-snippets')
+if !exists("g:snips_author")
+    let g:snips_author = "Dmytro Khoma"
+endif
+
+if !exists("g:snips_email")
+    let g:snips_email = "dima.homa5@email.com"
+endif
+
+if !exists("g:snips_github")
+    let g:snips_github = "https://github.com/Mechetel"
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Tmux
@@ -786,7 +798,7 @@ set background=dark   " Setting dark mode
 
 
 colorscheme dracula
-" colorscheme catppuccin
+" colorscheme catppuccin-mocha " catppuccin catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha
 " colorscheme jellybeans
 " colorscheme gruvbox
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -819,7 +831,7 @@ autocmd BufRead,BufNewFile *.mjml set filetype=slim
 autocmd BufRead,BufNewFile *.purs set filetype=purescript
 autocmd BufRead,BufNewFile *.dhall set filetype=dhall
 autocmd BufRead,BufNewFile *.slim set filetype=slim
-autocmd BufRead,BufNewFile Vagrantfile,Guardfile set filetype=ruby
+autocmd BufRead,BufNewFile Vagrantfile,Guardfile,Capfile set filetype=ruby
 autocmd BufRead,BufNewFile emacs,spaceemacs set filetype=lisp
 autocmd BufRead,BufNewFile *.axlsx set filetype=ruby
 autocmd BufRead,BufNewFile *.agda setf agda
