@@ -6,9 +6,9 @@ typeset -U PATH
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 # If you come from bash you might have to change your $PATH.
 export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -40,7 +40,7 @@ export ZSH="/Users/dmitryhoma/.oh-my-zsh"
 export EDITOR="/usr/local/bin/nvim"
 export VISUAL="/usr/local/bin/nvim"
 
-ZSH_THEME="powerlevel10k/powerlevel10k"
+# ZSH_THEME="powerlevel10k/powerlevel10k"
 
 DEFAULT_USER="$USER"
 
@@ -139,4 +139,6 @@ fi
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # To customize prompt, run `p10k configure` or edit ~/.dotfiles/p10k.zsh.
-[[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
+# [[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
+
+eval "$(starship init zsh)"
