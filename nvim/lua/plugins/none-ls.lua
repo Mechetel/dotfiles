@@ -6,8 +6,8 @@ return {
       sources = {
         null_ls.builtins.formatting.stylua,
         null_ls.builtins.formatting.prettier,
-        null_ls.builtins.formatting.rubocop,
-        null_ls.builtins.diagnostics.rubocop,
+        null_ls.builtins.formatting.rubocop.with({ timeout = 5000, prefer_local = "bin" }),
+        null_ls.builtins.diagnostics.rubocop.with({ timeout = 5000, prefer_local = "bin" }),
       },
     })
 

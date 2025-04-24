@@ -26,7 +26,7 @@ return {
       lspconfig.stimulus_ls.setup({capabilities = capabilities})
       lspconfig.rubocop.setup({capabilities = capabilities})
       lspconfig.ruby_lsp.setup({capabilities = capabilities})
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
+      vim.keymap.set("n", "<leader>K", vim.lsp.buf.hover, {})
       vim.keymap.set("n", "<leader>gd", vim.lsp.buf.definition, {})
       vim.keymap.set("n", "<leader>gr", vim.lsp.buf.references, {})
       vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {})
