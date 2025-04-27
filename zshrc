@@ -6,15 +6,15 @@ typeset -U PATH
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # If you come from bash you might have to change your $PATH.
 export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
 
 #add python3 from brew
-export PATH="/usr/local/opt/python@3.10/libexec/bin:$PATH"
+export PATH="/usr/local/opt/python@3.11/libexec/bin:$PATH"
 
 # Add node modules
 export PATH="$PATH:$HOME/.node_modules/bin"
@@ -40,7 +40,7 @@ export ZSH="/Users/dmitryhoma/.oh-my-zsh"
 export EDITOR="/usr/local/bin/nvim"
 export VISUAL="/usr/local/bin/nvim"
 
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 DEFAULT_USER="$USER"
 
@@ -86,22 +86,19 @@ done
 
 PROJECT_PATHS=($HOME/Projects)
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/dmitryhoma/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/dmitryhoma/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+# __conda_setup="$('/Users/dmitryhoma/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+# if [ $? -eq 0 ]; then
+#     eval "$__conda_setup"
+# else
+#     if [ -f "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh" ]; then
+#         . "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh"
+#     else
+#         export PATH="/Users/dmitryhoma/anaconda3/bin:$PATH"
+#     fi
+# fi
+# unset __conda_setup
 # <<< conda initialize <<<
 
 export NVM_DIR=~/.nvm
@@ -138,7 +135,9 @@ fi
 # # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
-# To customize prompt, run `p10k configure` or edit ~/.dotfiles/p10k.zsh.
-# [[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
-eval "$(starship init zsh)"
+# To customize prompt, run `p10k configure` or edit ~/.dotfiles/p10k.zsh.
+[[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
+
+# eval "$(starship init zsh)"

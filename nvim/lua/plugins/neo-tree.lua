@@ -1,43 +1,38 @@
 return {
-  "nvim-neo-tree/neo-tree.nvim",
-  branch = "v3.x",
+  "preservim/nerdtree",
   dependencies = {
-    "nvim-lua/plenary.nvim",
-    "nvim-tree/nvim-web-devicons",
-    "MunifTanjim/nui.nvim",
+    "ryanoasis/vim-devicons",
   },
+  event = "VeryLazy",
   config = function()
-    require("neo-tree").setup({
-      default_component_configs = {
-        git_status = {
-          symbols = {
-            added     = "✚",
-            deleted   = "✖",
-            modified  = "",
-            renamed   = "󰁕",
-            untracked = "",
-            ignored   = "◌",
-            unstaged  = "󰄱",
-            staged    = "",
-            conflict  = "",
-          },
-        },
-      },
-      filesystem = {
-        filtered_items = {
-          visible = true,
-          hide_dotfiles = false,
-          hide_by_name = {
-            ".DS_Store",
-            "thumbs.db",
-            ".git",
-          },
-        },
-      },
-    })
-    vim.keymap.set("n", "<F1>", ":Neotree reveal<CR>", {})
-    vim.keymap.set("n", "<F2>", ":Neotree filesystem toggle left<CR>", {})
-    vim.keymap.set("n", "<F3>", ":Neotree buffers toggle float<CR>", {})
-    vim.keymap.set("n", "<F4>", ":Neotree git_status toggle float<CR>", {})
+    -- NERDTree settings
+    vim.g.NERDTreeLimitedSyntax = 1
+    vim.g.NERDTreeHighlightCursorline = 0
+    vim.g.NERDTreeShowHidden = 1
+    vim.g.NERDTreeQuitOnOpen = 0
+    vim.g.NERDTreeShowLineNumbers = 1
+    vim.g.NERDTreeChDirMode = 0
+    vim.g.NERDTreeShowBookmarks = 1
+    vim.g.NERDTreeIgnore = {
+      "\\.git$",
+      "\\.hg$",
+      "\\node_modules$",
+      "\\.pyc$",
+      "^__generated__$",
+      "\\.agdai$",
+      "\\.agda\\.vim$",
+    }
+    vim.g.NERDTreeBookmarksFile = vim.fn.stdpath('cache') .. '/NERDTreeBookmarks'
+
+    -- Key mappings
+    vim.g.NERDTreeMapOpenVSplit = "V"
+    vim.g.NERDTreeMapToggleFiles = ""
+    vim.g.NERDTreeMapToggleFilters = ""
+    vim.g.NERDTreeMapHelp = "<M-/>"
+    vim.g.NERDTreeMapQuit = "Q"
+
+    -- Bindings
+    vim.keymap.set("n", "<F2>", ":NERDTreeToggle<CR>", { noremap = true, silent = true })
+    vim.keymap.set("n", "<F3>", ":NERDTreeFind<CR>", { noremap = true, silent = true })
   end,
 }

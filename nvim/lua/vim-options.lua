@@ -1,46 +1,103 @@
-vim.cmd("set expandtab")
-vim.cmd("set tabstop=2")
-vim.cmd("set softtabstop=2")
-vim.cmd("set shiftwidth=2")
-vim.cmd("set cursorline")
-vim.cmd("set showfulltag")
-vim.cmd("set shell=/bin/sh")
-vim.cmd("set noshelltemp")
-vim.cmd("set inccommand=nosplit")
-vim.cmd("set undofile")
-vim.cmd("set shiftround")
-vim.cmd("set showmatch")
-vim.cmd("set matchtime=2")
-vim.cmd("set lazyredraw")
-vim.cmd("set noshowmode")
-
-vim.cmd("set wildmode=list:full")
-vim.cmd("set wildignorecase")
-vim.cmd("set splitbelow")
-vim.cmd("set splitright")
-
-vim.opt.colorcolumn = "120"
-
-vim.opt.list = true
-vim.opt.showbreak = "↪ "
-vim.opt.listchars = {
-  tab = '│\\ ',
-  trail = '•',
-  extends = '❯',
-  precedes = '❮',
-  space = '·'
+--[[
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Core
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+]]
+-- Settings
+local settings = {
+  cache_dir = vim.fn.expand('~/.config/nvim/.cache'),
+  default_indent = 2,
+  max_column = 120,
 }
 
-vim.cmd("autocmd WinLeave * setlocal nocursorline")
-vim.cmd("autocmd WinEnter * setlocal cursorline")
+-- Helper functions
+local function get_cache_dir(suffix)
+  return vim.fn.resolve(settings.cache_dir .. '/' .. suffix)
+end
 
-vim.g.mapleader = ","
-vim.g.background = "light"
+local function ensure_exists(path)
+  if vim.fn.isdirectory(path) == 0 then
+    vim.fn.mkdir(path, 'p')
+  end
+end
 
+-- Create necessary directories
+ensure_exists(settings.cache_dir)
+ensure_exists(get_cache_dir('swap'))
+
+-- Swap files
+vim.opt.directory = get_cache_dir('swap')
 vim.opt.swapfile = false
 
-vim.wo.number = true
+-- Base configuration
+vim.opt.showfulltag = true
+vim.opt.shell = '/bin/sh'
+vim.opt.shelltemp = false
+vim.opt.inccommand = 'nosplit'
+vim.opt.undofile = true
 
+-- Whitespace
+vim.opt.expandtab = true
+vim.opt.tabstop = settings.default_indent
+vim.opt.softtabstop = settings.default_indent
+vim.opt.shiftwidth = settings.default_indent
+vim.opt.list = true
+vim.opt.listchars = { tab = '│ ', trail = '•', extends = '❯', precedes = '❮', space = '·' }
+vim.opt.shiftround = true
+vim.opt.linebreak = true
+vim.opt.showbreak = '↪ '
+
+-- Command-line completion
+vim.opt.wildmode = { 'list', 'full' }
+vim.opt.wildignorecase = true
+
+-- Window splits
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+
+-- Searching
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.grepprg = 'ag --nogroup --column --smart-case --nocolor --follow'
+vim.opt.grepformat = '%f:%l:%c:%m'
+
+-- Leader keys
+vim.g.mapleader = ','
+vim.g.maplocalleader = '\\'
+
+-- UI configuration
+vim.opt.showmatch = true
+vim.opt.matchtime = 2
+vim.opt.number = true
+vim.opt.lazyredraw = true
+vim.opt.showmode = false
+vim.opt.foldmethod = 'syntax'
+vim.opt.foldlevelstart = 99
+vim.opt.completeopt:remove('preview')
+
+vim.opt.cursorline = true
+vim.opt.colorcolumn = tostring(settings.max_column)
+
+-- Autocommands for cursorline
+vim.api.nvim_create_autocmd('WinLeave', {
+  pattern = '*',
+  callback = function()
+    vim.opt_local.cursorline = false
+  end,
+})
+
+vim.api.nvim_create_autocmd('WinEnter', {
+  pattern = '*',
+  callback = function()
+    vim.opt_local.cursorline = true
+  end,
+})
+
+--[[
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Mappings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+]]
 vim.keymap.set("n", "<M-8>", "#", { noremap = true })
 vim.keymap.set("n", "<leader>w", ":w<CR>", { noremap = true })
 
