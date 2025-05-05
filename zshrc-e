@@ -20,8 +20,8 @@ export PATH="/usr/local/opt/python@3.11/libexec/bin:$PATH"
 export PATH="$PATH:$HOME/.node_modules/bin"
 
 # this is for haskell
+export PATH="$PATH:$HOME/.stack/programs/x86_64-osx/ghc-9.10.1/bin"
 export PATH="$PATH:$HOME/.local/bin"
-[ -f "/Users/dmitryhoma/.ghcup/env" ] && . "/Users/dmitryhoma/.ghcup/env" # ghcup-env
 
 # apps important paths
 export PATH="$PATH:/Library/Apple/usr/bin"

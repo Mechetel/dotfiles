@@ -5,35 +5,35 @@
 ]]
 -- Settings
 local settings = {
-  cache_dir = vim.fn.expand('~/.config/nvim/.cache'),
+  cache_dir = vim.fn.expand("~/.config/nvim/.cache"),
   default_indent = 2,
   max_column = 120,
 }
 
 -- Helper functions
 local function get_cache_dir(suffix)
-  return vim.fn.resolve(settings.cache_dir .. '/' .. suffix)
+  return vim.fn.resolve(settings.cache_dir .. "/" .. suffix)
 end
 
 local function ensure_exists(path)
   if vim.fn.isdirectory(path) == 0 then
-    vim.fn.mkdir(path, 'p')
+    vim.fn.mkdir(path, "p")
   end
 end
 
 -- Create necessary directories
 ensure_exists(settings.cache_dir)
-ensure_exists(get_cache_dir('swap'))
+ensure_exists(get_cache_dir("swap"))
 
 -- Swap files
-vim.opt.directory = get_cache_dir('swap')
+vim.opt.directory = get_cache_dir("swap")
 vim.opt.swapfile = false
 
 -- Base configuration
 vim.opt.showfulltag = true
-vim.opt.shell = '/bin/sh'
+vim.opt.shell = "/bin/sh"
 vim.opt.shelltemp = false
-vim.opt.inccommand = 'nosplit'
+vim.opt.inccommand = "nosplit"
 vim.opt.undofile = true
 
 -- Whitespace
@@ -42,13 +42,13 @@ vim.opt.tabstop = settings.default_indent
 vim.opt.softtabstop = settings.default_indent
 vim.opt.shiftwidth = settings.default_indent
 vim.opt.list = true
-vim.opt.listchars = { tab = '│ ', trail = '•', extends = '❯', precedes = '❮', space = '·' }
+vim.opt.listchars = { tab = "│ ", trail = "•", extends = "❯", precedes = "❮", space = "·" }
 vim.opt.shiftround = true
 vim.opt.linebreak = true
-vim.opt.showbreak = '↪ '
+vim.opt.showbreak = "↪ "
 
 -- Command-line completion
-vim.opt.wildmode = { 'list', 'full' }
+vim.opt.wildmode = { "list", "full" }
 vim.opt.wildignorecase = true
 
 -- Window splits
@@ -58,12 +58,12 @@ vim.opt.splitright = true
 -- Searching
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
-vim.opt.grepprg = 'ag --nogroup --column --smart-case --nocolor --follow'
-vim.opt.grepformat = '%f:%l:%c:%m'
+vim.opt.grepprg = "ag --nogroup --column --smart-case --nocolor --follow"
+vim.opt.grepformat = "%f:%l:%c:%m"
 
 -- Leader keys
-vim.g.mapleader = ','
-vim.g.maplocalleader = '\\'
+vim.g.mapleader = ","
+vim.g.maplocalleader = "\\"
 
 -- UI configuration
 vim.opt.showmatch = true
@@ -71,23 +71,23 @@ vim.opt.matchtime = 2
 vim.opt.number = true
 vim.opt.lazyredraw = true
 vim.opt.showmode = false
-vim.opt.foldmethod = 'syntax'
+vim.opt.foldmethod = "syntax"
 vim.opt.foldlevelstart = 99
-vim.opt.completeopt:remove('preview')
+vim.opt.completeopt:remove("preview")
 
 vim.opt.cursorline = true
 vim.opt.colorcolumn = tostring(settings.max_column)
 
 -- Autocommands for cursorline
-vim.api.nvim_create_autocmd('WinLeave', {
-  pattern = '*',
+vim.api.nvim_create_autocmd("WinLeave", {
+  pattern = "*",
   callback = function()
     vim.opt_local.cursorline = false
   end,
 })
 
-vim.api.nvim_create_autocmd('WinEnter', {
-  pattern = '*',
+vim.api.nvim_create_autocmd("WinEnter", {
+  pattern = "*",
   callback = function()
     vim.opt_local.cursorline = true
   end,
@@ -124,10 +124,10 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
 
-vim.keymap.set("", "gh", "0", { noremap = true }) -- початок рядка
-vim.keymap.set("", "gi", "^", { noremap = true }) -- перший непробільний символ
+vim.keymap.set("", "gh", "0", { noremap = true })  -- початок рядка
+vim.keymap.set("", "gi", "^", { noremap = true })  -- перший непробільний символ
 vim.keymap.set("", "gl", "g_", { noremap = true }) -- кінець рядка (ігноруючи \n)
-vim.keymap.set("", "gj", "G", { noremap = true }) -- в кінець файлу
+vim.keymap.set("", "gj", "G", { noremap = true })  -- в кінець файлу
 vim.keymap.set("", "gk", "gg", { noremap = true }) -- на початок файлу
 
 -- В інсерт-режимі вставка з реєстру
@@ -140,25 +140,18 @@ vim.keymap.set("i", "<M-p>", "<C-r><C-p>+", { noremap = true })
 vim.keymap.set("c", "<M-p>", "<C-r>+", { noremap = true })
 
 -- Вставка з буфера обміну
-vim.keymap.set("n", "p", '"+p', { noremap = true })
-vim.keymap.set("v", "p", '"+p', { noremap = true })
-vim.keymap.set("n", "<M-p>", "p", { noremap = true })
-vim.keymap.set("v", "<M-p>", "p", { noremap = true })
+vim.keymap.set({"n", "v"}, "p", '"+p', { noremap = true })
+vim.keymap.set({"n", "v"}, "<M-p>", "p", { noremap = true })
 
-vim.keymap.set("n", "P", '"+P', { noremap = true })
-vim.keymap.set("v", "P", '"+P', { noremap = true })
-vim.keymap.set("n", "<M-P>", "P", { noremap = true })
-vim.keymap.set("v", "<M-P>", "P", { noremap = true })
+vim.keymap.set({"n", "v"}, "P", '"+P', { noremap = true })
+vim.keymap.set({"n", "v"}, "<M-P>", "P", { noremap = true })
 
 -- Копіювання в буфер обміну
-vim.keymap.set("n", "y", '"+y', { noremap = true })
-vim.keymap.set("v", "y", '"+y', { noremap = true })
-vim.keymap.set("n", "<M-y>", "y", { noremap = true })
-vim.keymap.set("v", "<M-y>", "y", { noremap = true })
+vim.keymap.set({"n", "v"}, "y", '"+y', { noremap = true })
+vim.keymap.set({"n", "v"}, "<M-y>", "y", { noremap = true })
 
 vim.keymap.set("n", "Y", '"+y$', { noremap = true })
-vim.keymap.set("n", "<M-Y>", "y$", { noremap = true })
-vim.keymap.set("v", "<M-Y>", "y$", { noremap = true })
+vim.keymap.set({"n", "v"}, "<M-Y>", "y$", { noremap = true })
 
 -- Вирізання в буфер обміну
 vim.keymap.set("n", ",d", '"+d', { noremap = true })
@@ -172,11 +165,9 @@ vim.keymap.set("i", "<C-u>", "<C-g>u<C-u>", { noremap = true })
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })
 
 -- Пошук вперед з very magic у нормальному і візуальному режимах
-vim.keymap.set("n", "/", "/\\v", { noremap = true })
-vim.keymap.set("v", "/", "/\\v", { noremap = true })
+vim.keymap.set({"n", "v"}, "/", "/\\v", { noremap = true })
 -- Пошук назад з very magic у нормальному і візуальному режимах
-vim.keymap.set("n", "?", "?\\v", { noremap = true })
-vim.keymap.set("v", "?", "?\\v", { noremap = true })
+vim.keymap.set({"n", "v"}, "?", "?\\v", { noremap = true })
 
 -- Глобальна заміна в усьому файлі в нормальному режимі
 vim.keymap.set("n", "dm", ":%s:::g<left><left><left>", { noremap = true })
@@ -210,7 +201,7 @@ vim.keymap.set("v", "<", "<gv", { noremap = true })
 vim.keymap.set("v", ">", ">gv", { noremap = true })
 
 vim.keymap.set("n", "gp", function()
-	return "`[" .. vim.fn.strpart(vim.fn.getregtype(), 0, 1) .. "`]"
+  return "`[" .. vim.fn.strpart(vim.fn.getregtype(), 0, 1) .. "`]"
 end, { noremap = true, expr = true })
 
 -- Відкриває вертикальний спліт і переміщає курсор у нове вікно
@@ -242,9 +233,6 @@ local opts = { noremap = true, silent = true }
 -- <C-s> переназначено на <C-a>
 vim.keymap.set("n", "<C-s>", "<C-a>", opts)
 
--- Перезавантаження конфігурації Vim
-vim.keymap.set("n", "<leader>R", ":so $MYVIMRC<CR>", opts)
-
 -- Terminal mode
 vim.keymap.set("t", "<C-\\><C-\\>", "<C-\\><C-n>", opts)
 vim.keymap.set("t", "<Left>", "<C-\\><C-n>:bprev<CR>", opts)
@@ -261,8 +249,53 @@ vim.keymap.set("v", "<C-S-Down>", ":m'>+<CR>gv=gv", opts)
 vim.keymap.set("v", "<C-S-Up>", ":m-2<CR>gv=gv", opts)
 
 -- IndentWise (без noremap, бо це <Plug>)
-vim.keymap.set("n", "K", "<Plug>(IndentWiseBlockScopeBoundaryBegin)", { silent = true })
-vim.keymap.set("n", "J", "<Plug>(IndentWiseBlockScopeBoundaryEnd)", { silent = true })
+vim.keymap.set({"n", "v"}, "K", "<Plug>(IndentWiseBlockScopeBoundaryBegin)", { silent = true })
+vim.keymap.set({"n", "v"}, "J", "<Plug>(IndentWiseBlockScopeBoundaryEnd)", { silent = true })
 
 -- Звичайне J на <M-i> (Alt+i)
 vim.keymap.set("n", "<M-i>", "J", opts)
+
+-- Delete to beginning of line (already default, but explicit)
+vim.keymap.set("i", "<C-u>", "<C-u>")
+-- Delete to end of line
+vim.keymap.set("i", "<C-k>", "<C-o>D")
+-- Delete previous word (already default, but explicit)
+vim.keymap.set("i", "<C-w>", "<C-w>")
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function()
+    local mark = vim.api.nvim_buf_get_mark(0, '"')
+    local line_count = vim.api.nvim_buf_line_count(0)
+    if mark[1] > 0 and mark[1] <= line_count then
+      vim.api.nvim_win_set_cursor(0, { mark[1], mark[2] })
+      vim.cmd("normal! zvzz")
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("FocusLost", {
+  callback = function()
+    vim.cmd("silent! wall")
+  end,
+})
+
+vim.opt.autowriteall = true
+
+
+-- Function to strip trailing whitespace before saving
+local function strip_trailing_whitespaces()
+  local curr_line = vim.fn.line(".")
+  local curr_col = vim.fn.col(".")
+
+  -- Strip trailing whitespace from the entire file
+  vim.cmd("%s/\\s\\+$//e")
+
+  -- Restore cursor position
+  vim.fn.cursor(curr_line, curr_col)
+end
+
+-- Set up the autocommand to run before saving any file
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*",
+  callback = strip_trailing_whitespaces,
+})
