@@ -4,15 +4,18 @@ return {
   },
   {
     "nvim-telescope/telescope.nvim",
-    tag = "0.1.5",
+    tag = "0.1.8",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("telescope").setup({
-        extensions = {
-          ["ui-select"] = {
-            require("telescope.themes").get_dropdown({}),
+        defaults = {
+          layout_strategy = "horizontal",
+          layout_config = {
+            height = 0.99,
+            width = 0.99,
           },
         },
+        extensions = { ["ui-select"] = { require("telescope.themes").get_dropdown({}) } },
       })
       local builtin = require("telescope.builtin")
       vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
