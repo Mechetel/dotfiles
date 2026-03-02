@@ -154,6 +154,3 @@ fi
 [[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
 
 # eval "$(starship init zsh)"
-
-# Added by Antigravity
-# export PATH="/Users/dmitryhoma/.antigravity/antigravity/bin:$PATH"
