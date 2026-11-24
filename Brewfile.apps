@@ -1,0 +1,55 @@
+# GUI-приложения. Отдельно от Brewfile, чтобы CLI-часть ставилась и без них:
+#   ./install.sh --no-apps
+#   brew bundle --file=~/.dotfiles/Brewfile.apps
+#
+# Версии не закреплены — cask всегда последний.
+
+# ── Терминалы и редакторы ────────────────────────────────────────────────────
+cask "kitty"
+cask "iterm2"
+cask "visual-studio-code"
+cask "karabiner-elements"   # конфиг: karabiner/karabiner.json
+
+# ── Разработка ───────────────────────────────────────────────────────────────
+cask "docker-desktop"
+cask "postgres-unofficial"  # Postgres.app
+cask "pgadmin4"
+cask "ngrok"
+cask "chromedriver"
+cask "copilot-cli"
+cask "drawio"
+cask "figma"
+
+# ── Браузер и общение ────────────────────────────────────────────────────────
+cask "google-chrome"
+cask "slack"
+cask "telegram"
+cask "discord"
+cask "zoom"
+cask "microsoft-teams"
+cask "webex"
+
+# ── ИИ ───────────────────────────────────────────────────────────────────────
+cask "claude"
+cask "chatgpt"
+
+# ── Утилиты ──────────────────────────────────────────────────────────────────
+cask "bartender"
+cask "adguard"
+cask "coconutbattery"
+cask "cleanmymac"
+cask "vlc"
+cask "obsidian"
+cask "loom"
+cask "libreoffice"
+cask "mendeley-reference-manager"
+
+# ── Mac App Store (нужен вход в App Store; id — из `mas search`) ─────────────
+mas "Xcode",    id: 497799835
+mas "Keynote",  id: 409183694
+mas "Numbers",  id: 409203825
+mas "Pages",    id: 409201541
+mas "WireGuard", id: 1451685025
+
+# Ставятся вручную / не в brew: Adobe CC 2020, Microsoft Office, Mathematica,
+# ClearVPN, Folx, KeyKey, CopyClip — см. README.
