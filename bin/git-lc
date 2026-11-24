@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+# git-lc - "linted git commit": checks the commit message against Conventional Commits
+# and only then runs `git commit`. Replaces the commitlint + linted-git-commit npm
+# packages with one dependency-free bash file (bash 3.2+; macOS and Linux).
+#
+#   git-lc -m "feat(auth): add login"            # lint, then commit
+#   git-lc -m "fix: bug" -m "More details..."    # several -m, like git
+#   git-lc -a --amend -m "fix: typo"             # all other arguments go to git commit
+#   git-lc --no-verify -m "chore: wip"
+#   git-lc --check FILE | git-lc --check -       # lint only (file or stdin), no commit
+#   git-lc -h                                    # types and rules
+#
+# Aliases (zsh/git.sh): lc, lcn (--no-verify), lc! (--amend), lcn! (--no-verify --amend).
+# As a git hook: .git/hooks/commit-msg  ->  exec git-lc --check "$1"
+#
+# Rules = @commitlint/config-conventional with our own list of types (TYPES below):
+#   type-empty / type-case / type-enum, scope-case, subject-empty, subject-full-stop,
+#   subject-case (no Sentence/Start/Pascal/UPPER case), header-max-length 100,
+#   body/footer-max-line-length 100, body-leading-blank (warning only).
+# Skipped on purpose: Merge ..., Revert "...", fixup!/squash!/amend! messages.
+
+TYPES="chore ci feat fix docs style refactor perf test revert"
+MAX_LEN=100
+
+if [ -t 2 ]; then R=$'\033[31m'; Y=$'\033[33m'; B=$'\033[1m'; D=$'\033[2m'; O=$'\033[0m'; else R=; Y=; B=; D=; O=; fi
+
+usage() {
+  cat <<USAGE
+${B}git-lc${O} - commit with message linting (Conventional Commits)
+
+  ${B}format:${O} <type>(<scope>): <subject>     scope is optional; "!" after the type marks a breaking change
+
+  ${B}types:${O}
+    chore     build process, tooling, dependencies
+    ci        CI configuration and scripts
+    feat      a new feature
+    fix       a bug fix
+    docs      documentation
+    style     formatting, white-space
+    refactor  code change that neither fixes a bug nor adds a feature
+    perf      performance improvement
+    test      adding or changing tests
+    revert    reverts earlier changes
+
+  ${B}rules:${O} type and scope are lower-case; subject is non-empty, does not start with a
+  capital letter and has no trailing period; header and body lines are at most ${MAX_LEN} characters;
+  a blank line separates header and body.
+
+  ${B}usage:${O} git-lc -m "feat: add x" [any git commit arguments]
+         git-lc --check FILE|-      lint a message only
+USAGE
+}
+
+# lint "<message>" - prints problems to stderr; returns 1 if there are errors
+lint() {
+  local msg="$1" header line n=0 errors=0 warns=0 type scope subject t ok
+  # drop git comment lines (#...) and trailing blank lines
+  msg=$(printf '%s\n' "$msg" | grep -v '^#' | sed -e :a -e '/^[[:space:]]*$/{$d;N;ba' -e '}')
+  header=$(printf '%s\n' "$msg" | head -n 1)
+
+  case "$header" in
+    Merge\ *|Revert\ \"*|fixup!\ *|squash!\ *|amend!\ *) return 0 ;;
+  esac
+
+  err()  { printf '  %s✖%s  %s %s[%s]%s\n' "$R" "$O" "$1" "$D" "$2" "$O" >&2; errors=$((errors + 1)); }
+  warn() { printf '  %s⚠%s  %s %s[%s]%s\n' "$Y" "$O" "$1" "$D" "$2" "$O" >&2; warns=$((warns + 1)); }
+
+  if [ -z "$header" ]; then
+    err "message is empty" subject-empty
+  elif [[ $header =~ ^([A-Za-z]+)(\(([^\)]*)\))?(!)?:([[:space:]]+(.*))?$ ]]; then
+    type="${BASH_REMATCH[1]}"; scope="${BASH_REMATCH[3]}"; subject="${BASH_REMATCH[6]}"
+
+    [ "$type" = "$(printf '%s' "$type" | tr 'A-Z' 'a-z')" ] || err "type must be lower-case" type-case
+    ok=0; for t in $TYPES; do [ "$t" = "$type" ] && ok=1; done
+    [ $ok = 1 ] || err "type must be one of: $TYPES (got \"$type\")" type-enum
+
+    if [ -n "$scope" ] && [ "$scope" != "$(printf '%s' "$scope" | tr 'A-Z' 'a-z')" ]; then
+      err "scope must be lower-case" scope-case
+    fi
+    if [ -z "$subject" ]; then
+      err "subject may not be empty" subject-empty
+    else
+      case "$subject" in [[:upper:]]*) err "subject must not start with a capital letter (sentence/start/pascal/upper-case)" subject-case ;; esac
+      case "$subject" in *.) err "subject must not end with a period" subject-full-stop ;; esac
+    fi
+  else
+    err "header must look like \"type(scope): subject\"" type-empty
+    err "subject not found" subject-empty
+  fi
+
+  [ ${#header} -le $MAX_LEN ] || err "header is longer than $MAX_LEN characters (${#header})" header-max-length
+
+  # body: blank line after the header, and line length
+  if [ "$(printf '%s\n' "$msg" | wc -l | tr -d ' ')" -gt 1 ]; then
+    [ -z "$(printf '%s\n' "$msg" | sed -n 2p)" ] || warn "a blank line is required between header and body" body-leading-blank
+  fi
+  while IFS= read -r line; do
+    n=$((n + 1)); [ $n -eq 1 ] && continue
+    [ ${#line} -le $MAX_LEN ] || err "line $n is longer than $MAX_LEN characters (${#line})" body-max-line-length
+  done <<MSG
+$msg
+MSG
+
+  if [ $errors -gt 0 ]; then
+    printf '  %s%d error(s), %d warning(s)%s  - run git-lc -h for the rules\n' "$R" $errors $warns "$O" >&2
+    return 1
+  fi
+  return 0
+}
+
+# -- argument parsing ----------------------------------------------------------
+gitargs=(); msgs=(); check=0; checkfile=""
+while [ $# -gt 0 ]; do
+  a="$1"; shift
+  case "$a" in
+    -h|--help) usage; exit 0 ;;
+    --check)   check=1; checkfile="${1:--}"; [ $# -gt 0 ] && shift ;;
+    -m|--message)   [ $# -gt 0 ] || { echo "git-lc: $a needs a message" >&2; exit 2; }; msgs+=("$1"); shift ;;
+    --message=*)    msgs+=("${a#--message=}") ;;
+    -[a-zA-Z]*m)    # flags glued to -m, e.g. -am "msg"
+      if [ ${#a} -gt 2 ]; then
+        [ $# -gt 0 ] || { echo "git-lc: $a needs a message" >&2; exit 2; }
+        gitargs+=("${a%m}"); msgs+=("$1"); shift
+      else gitargs+=("$a"); fi ;;
+    *) gitargs+=("$a") ;;
+  esac
+done
+
+if [ $check = 1 ]; then
+  if [ "$checkfile" = "-" ]; then text=$(cat); else text=$(cat "$checkfile") || exit 2; fi
+  lint "$text"; exit $?
+fi
+
+if [ ${#msgs[@]} -eq 0 ]; then
+  echo "${R}git-lc: empty message - pass -m \"type: subject\"${O}" >&2
+  usage >&2; exit 1
+fi
+
+# several -m values become paragraphs, the way git does it
+full="${msgs[0]}"; i=1
+while [ $i -lt ${#msgs[@]} ]; do full="$full"$'\n\n'"${msgs[$i]}"; i=$((i + 1)); done
+
+lint "$full" || exit 1
+exec git commit ${gitargs[@]+"${gitargs[@]}"} -m "$full"
