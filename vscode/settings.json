@@ -1,0 +1,41 @@
+{
+    "search.searchOnType": false,
+    "editor.renderWhitespace": "all", 
+    "terminal.integrated.fontFamily": "'MesloLGS NF'",
+    "workbench.iconTheme": "material-icon-theme",
+    "emmet.triggerExpansionOnTab": true,
+    "editor.tabSize": 2,
+    "editor.minimap.enabled": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.fontFamily": "Fira Code Freeze",
+    "editor.fontLigatures": true,
+    "editor.largeFileOptimizations": false,
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false
+    },
+    "github.copilot.editor.enableAutoCompletions": true,
+    "jupyter.askForKernelRestart": false,
+    "workbench.colorTheme": "Dracula Theme",
+    "notebook.editorOptionsCustomizations": {
+        "editor.tabSize": 4,
+        "editor.indentSize": 4,
+        "editor.insertSpaces": true
+    },
+    "terminal.integrated.inheritEnv": false,
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "markdown-pdf.headerTemplate": "<div></div>",
+    "python.defaultInterpreterPath": "/usr/local/bin/python3",
+    "explorer.confirmDragAndDrop": false,
+    "terminal.integrated.shellIntegration.enabled": false,
+    "claudeCode.preferredLocation": "panel",
+    "claudeCode.selectedModel": "haiku",
+    "http.systemCertificatesNode": true,
+    "chat.viewSessions.orientation": "stacked",
+    "rubyLsp.rubyVersionManager": {
+        "identifier": "rvm"
+    },
+}

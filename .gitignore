@@ -1,12 +1,28 @@
+# ── Секреты: репозиторий ПУБЛИЧНЫЙ ──────────────────────────────────────────
+secrets/
+*.local
+.env
+.env.*
+*.pem
+*.key
+*.gpg
+id_rsa*
+id_ed25519*
+.netrc
+.git-credentials
+
+# ── Локальное состояние и шум ───────────────────────────────────────────────
+.DS_Store
+.cache
+__pycache__/
+*.bak
+*.bak-*
+*.old
+zshrc.bak-*
 ranger/history
 ranger/bookmarks
 ranger/tagged
 tmux/plugins/*
 !tmux/plugins/tpm
-__pycache__/
 nvim/.netrwhist
-nvim/bundle
-!nvim/bundle/repos/github.com/Shougo/dein.vim
-.cache
 commitlint/node_modules
-.DS_Store
