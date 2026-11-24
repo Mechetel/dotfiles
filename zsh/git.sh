@@ -45,7 +45,7 @@ alias grh="git reset --hard"
 bitbucket-delete-repository () {
   curdir=${PWD##*/}
   repo_name=${1:-$curdir}
-  curl -X DELETE --user "${BITBUCKET_LOGIN}":"${BITBUCKET_PASS}" https://api.bitbucket.org/2.0/repositories/mechetel/$repository
+  curl -X DELETE --user "${BITBUCKET_LOGIN}":"${BITBUCKET_PASS}" https://api.bitbucket.org/2.0/repositories/mechetel/$repo_name
 }
 
 github-create-and-upload () {

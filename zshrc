@@ -1,156 +1,156 @@
+# ~/.zshrc  ->  ~/.dotfiles/zshrc   (симлинк, см. scripts/link.sh)
+#
+# Порядок важен:
+#   1. p10k instant prompt   — самым первым
+#   2. brew + PATH           — до oh-my-zsh, чтобы плагины видели нужные бинарники
+#   3. oh-my-zsh + плагины
+#   4. zsh/*.sh (алиасы, функции, биндинги)
+#   5. менеджеры версий      — rvm ПОСЛЕДНИМ из тех, что трогают PATH
+#   6. p10k.zsh
+# Машинно-специфичное и секреты — в ~/.zshrc.local (в git не попадает).
+
 export LC_ALL=en_US.UTF-8
 export LC_CTYPE=en_US.UTF-8
 
-typeset -U PATH
+typeset -U path PATH fpath    # без дублей в PATH и fpath
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Корень репозитория определяется по симлинку, а не хардкодится.
+export DOTFILES="${${(%):-%N}:A:h}"
+
+# ── 1. Powerlevel10k instant prompt ──────────────────────────────────────────
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-export PATH="$PATH:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin"
+# ── 2. Homebrew и PATH ───────────────────────────────────────────────────────
+# Apple Silicon -> /opt/homebrew, Intel -> /usr/local.
+for _b in /opt/homebrew/bin/brew /usr/local/bin/brew; do
+  [[ -x $_b ]] && { eval "$($_b shellenv)"; break; }
+done
+unset _b
+export HOMEBREW_NO_ANALYTICS=1
 
-#add python3 from brew
-export PATH="/usr/local/opt/python@3.11/libexec/bin:$PATH"
+# Добавляет существующие каталоги: _path_front — в начало, _path_back — в конец.
+_path_front() { local d; for d in "${(Oa)@}"; do [[ -d $d ]] && path=($d ${path:#$d}); done; }
+_path_back()  { local d; for d in "$@";        do [[ -d $d ]] && path=(${path:#$d} $d); done; }
 
-# Add node modules
-export PATH="$PATH:$HOME/.node_modules/bin"
+# keg-only формулы brew (в порядке приоритета). Версионные kegs (node@20, mysql@5.7) сюда
+# больше не нужны: ставится последняя версия, она уже в $HOMEBREW_PREFIX/bin.
+if [[ -n $HOMEBREW_PREFIX ]]; then
+  _kegs=()
+  for _k in openssl@3 icu4c; do
+    _kegs+=("$HOMEBREW_PREFIX/opt/$_k/bin" "$HOMEBREW_PREFIX/opt/$_k/sbin")
+  done
+  _path_front $_kegs
+  unset _kegs _k
 
-# this is for haskell
-export PATH="$PATH:$HOME/.local/bin"
-[ -f "/Users/dmitryhoma/.ghcup/env" ] && . "/Users/dmitryhoma/.ghcup/env" # ghcup-env
+  export PKG_CONFIG_PATH="$HOMEBREW_PREFIX/opt/libxslt/lib/pkgconfig:$HOMEBREW_PREFIX/opt/libxml2/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+fi
 
-# apps important paths
-export PATH="$PATH:/Library/Apple/usr/bin"
-export PATH="$PATH:/System/Cryptexes/App/usr/bin"
+_path_back \
+  "$HOME/.local/bin" \
+  "$HOME/.bun/bin" \
+  "$HOME/.cargo/bin" \
+  "$HOME/.node_modules/bin" \
+  "$HOME/.elan/bin" \
+  "/Applications/Postgres.app/Contents/Versions/latest/bin" \
+  "${HOMEBREW_PREFIX:-/usr/local}/opt/postgresql@18/bin" \
+  "${HOMEBREW_PREFIX:-/usr/local}/opt/libpq/bin" \
+  "$HOME/.elasticsearch/bin" \
+  "$HOME/.kibana/bin" \
+  "$HOME/.meilisearch/bin"
 
-# postgres
-export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
-export PATH="$PATH:/usr/local/opt/postgresql@17/bin"
+[[ -f $HOME/.ghcup/env ]] && source "$HOME/.ghcup/env"
 
-# OpenJDK for elasticsearch # deprecated
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export EDITOR=nvim
+export VISUAL=nvim
+export FI_PROVIDER=tcp
 
-# elasticsearch and kibana
-export PATH="$PATH:$HOME/.elasticsearch/bin"
-export PATH="$PATH:$HOME/.kibana/bin"
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/dmitryhoma/.oh-my-zsh"
-export EDITOR="/usr/local/bin/nvim"
-export VISUAL="/usr/local/bin/nvim"
-
+# ── 3. oh-my-zsh ─────────────────────────────────────────────────────────────
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="powerlevel10k/powerlevel10k"
-
 DEFAULT_USER="$USER"
+
+# Не ходить в сеть при старте и не гонять compaudit (каждый запуск стоил ~100 мс).
+zstyle ':omz:update' mode disabled
+ZSH_DISABLE_COMPFIX=true
 
 plugins=(
   git
-  ## appearence
+  ## внешний вид
   colorize
   compleat
   common-aliases
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  zsh-completions
-
-  ## editing
+  ## редактирование и навигация
   vi-mode
-
-  ## navigation
   dirpersist
   pj
   zsh-navigation-tools
-
-  systemd
   sudo
-
   ## ruby
   bundler
   ruby
   rails
   gem
-
   ## docker
   docker
   docker-compose
+  ## внешние (ставит scripts/shell.sh); syntax-highlighting — строго последним
+  zsh-autosuggestions
+  zsh-completions
+  zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+PROJECT_PATHS=($HOME/Projects)   # плагин pj
 
-DOTFILES=$HOME/.dotfiles
+source "$ZSH/oh-my-zsh.sh"
 
-for file in $HOME/.dotfiles/zsh/*.sh; do
-  source $file
-done
+# История: больше и без дублей (oh-my-zsh по умолчанию хранит всего 10 000).
+HISTSIZE=200000
+SAVEHIST=200000
+setopt HIST_IGNORE_ALL_DUPS HIST_REDUCE_BLANKS HIST_IGNORE_SPACE SHARE_HISTORY
 
-PROJECT_PATHS=($HOME/Projects)
+# ── 4. Алиасы, функции, биндинги ─────────────────────────────────────────────
+for _f in "$DOTFILES"/zsh/*.sh(N); do source "$_f"; done
+unset _f
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/dmitryhoma/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/dmitryhoma/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/dmitryhoma/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+# fzf: Ctrl-R (история), Ctrl-T (файлы), Alt-C (cd). После oh-my-zsh, чтобы перебить vi-mode.
+(( $+commands[fzf] )) && source <(fzf --zsh 2>/dev/null)
 
-export NVM_DIR=~/.nvm
-source $(brew --prefix nvm)/nvm.sh
+# ── 5. Менеджеры версий ──────────────────────────────────────────────────────
+# nvm — лениво: nvm.sh стоил ~600 мс на каждый запуск шелла. Первый вызов `nvm`
+# подгружает его и сразу выполняет команду; node/npm берутся из brew.
+export NVM_DIR="$HOME/.nvm"
+nvm() {
+  unfunction nvm
+  local _nvm_sh="${HOMEBREW_PREFIX:+$HOMEBREW_PREFIX/opt/nvm/nvm.sh}"
+  [[ -s $_nvm_sh ]] || _nvm_sh="$NVM_DIR/nvm.sh"
+  [[ -s $_nvm_sh ]] && source "$_nvm_sh" || { print -u2 "nvm не установлен (brew install nvm)"; return 1 }
+  nvm "$@"
+}
 
-# ruby which is instelled by brew <<<<< on the SECOND PATH
-export PATH="/usr/local/opt/node@20/bin:$PATH"
-# export PATH="/usr/local/opt/node@14/bin:$PATH"
-export PATH="/Users/dmitryhoma/.nvm/versions/node/v16.20.0/bin/node:$PATH"
-
-export PATH="/usr/local/opt/icu4c/bin:$PATH"
-export PATH="/usr/local/opt/icu4c/sbin:$PATH"
-
-export PATH="/usr/local/opt/ruby/bin:$PATH"
-export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
-export PATH="/usr/local/opt/openssl@3/bin:$PATH"
-
-export PKG_CONFIG_PATH="/usr/local/opt/libxslt/lib/pkgconfig:$PKG_CONFIG_PATH"
-export PKG_CONFIG_PATH="/usr/local/opt/libxml2/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-# =================== RUBY RVM =======================
-# Add RVM to PATH for scripting
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# Enable auto-switching of Ruby versions when changing directories
-export rvm_project_rvmrc=1
-
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-# For tmux sessions, ensure RVM is properly loaded
-if [[ -n $TMUX ]] && [[ "$(whence -w rvm)" == *"function"* ]]; then
-    rvm use default >/dev/null 2>&1 6>&1
-    cd .
+# VS Code shell integration
+if [[ $TERM_PROGRAM == vscode ]] && (( $+commands[code] )); then
+  source "$(code --locate-shell-integration-path zsh)"
 fi
 
-source ~/.powerlevel10k/powerlevel10k.zsh-theme
+# Локальное для этой машины (секреты, рабочие токены, пути)
+[[ -f $HOME/.zshrc.local ]] && source "$HOME/.zshrc.local"
 
-# VS Code Shell Integration - Official method
-if [[ "$TERM_PROGRAM" == "vscode" ]]; then
-    # Load official VS Code script
-    source "$(code --locate-shell-integration-path zsh)"
-
-    # Force required environment variables
-    export VSCODE_SHELL_INTEGRATION=1
-    export VSCODE_INJECTION=1
+# rvm — последним: он требует быть последним в PATH.
+_path_back "$HOME/.rvm/bin"
+[[ -s $HOME/.rvm/scripts/rvm ]] && source "$HOME/.rvm/scripts/rvm"
+# brew shellenv ставит /usr/local/bin в начало, и rvm оказывается за ним — тогда `bundle`/`gem`
+# берутся из системы. Явно вернуть bin текущего ruby/gemset на первое место.
+if [[ -n $GEM_HOME && -n $MY_RUBY_HOME ]]; then
+  _path_front "$GEM_HOME/bin" "$GEM_HOME@global/bin" "$MY_RUBY_HOME/bin"
+fi
+# Новые панели/окна tmux: дёрнуть rvm-хук cd, чтобы подхватить .ruby-version
+if [[ -n $TMUX ]] && (( $+functions[rvm] )); then
+  cd "$PWD"
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.dotfiles/p10k.zsh.
-[[ ! -f ~/.dotfiles/p10k.zsh ]] || source ~/.dotfiles/p10k.zsh
-
-# eval "$(starship init zsh)"
+# ── 6. Тема ──────────────────────────────────────────────────────────────────
+# Настройка промпта: `p10k configure` или правка ~/.dotfiles/p10k.zsh
+[[ -f $HOME/.p10k.zsh ]] && source "$HOME/.p10k.zsh"
+# Запасной вариант без p10k: eval "$(starship init zsh)"

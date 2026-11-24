@@ -1,5 +1,4 @@
+# Вернуть текущему пользователю файлы, которые docker создал от root (работает на macOS и Linux).
 unroot-root-files() {
-  # * doesn't include hidden files by default
-  sudo chown --from=root:root -R `whoami`:users ./* && sudo chown --from=root:root -R `whoami`:users ./.[^.]*
+  sudo find . -user root -exec chown "$(id -un):$(id -gn)" {} +
 }
-

@@ -1,3 +1,3 @@
 grep_and_rm () {
-  grep -e "$1" **/*.rake **/*.rb -l | xargs -d '\n' rm
+  grep -le "$1" **/*.rake **/*.rb | tr '\n' '\0' | xargs -0 rm
 }

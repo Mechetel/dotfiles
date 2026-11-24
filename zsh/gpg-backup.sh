@@ -1,10 +1,12 @@
-GPG_BACKUP_DIR="$HOME/.dotfiles/secrets/gpg"
+# ВНЕ репозитория: тут лежат секретные ключи, а репозиторий публичный.
+GPG_BACKUP_DIR="${GPG_BACKUP_DIR:-$HOME/.local/share/gpg-backup}"
 USER_EMAIL="dima.homa5@gmail.com"
 
 # https://gist.github.com/chrisroos/1205934
 
 gpg-backup () {
-  mkdir -p $GPG_BACKUP_DIR
+  umask 077
+  mkdir -p "$GPG_BACKUP_DIR" && chmod 700 "$GPG_BACKUP_DIR"
 
   # ownertrust
   gpg --export-ownertrust > $GPG_BACKUP_DIR/ownertrust.txt

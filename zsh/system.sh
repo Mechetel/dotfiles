@@ -5,12 +5,11 @@ alias z="zsh"
 alias r="ranger"
 alias top="htop"
 alias o="openssl"
-alias d="docker"
 alias py="python3"
 alias c="clear"
 
 # usage ln-s whatfile wherefile
-alias ln-s="ln -sfT"
+alias ln-s="ln -sfn"
 
 alias sctl="systemctl"
 
@@ -21,6 +20,7 @@ alias nh="n-history"
 alias cls="colorls --dark"
 
 alias rmf="rm -rfd"
+alias rmds="find . -name '.DS_Store' -delete"
 
 # unalias fd
 # alias cmus='screen -q -r -D cmus || screen -S cmus $(whereis cmus)'
