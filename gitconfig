@@ -1,8 +1,6 @@
 [user]
 	name = Mechetel
 	email = dima.homa5@gmail.com
-[credential]
-	helper = cache --timeout=600
 [core]
 	autocrlf = false
 	safecrlf = true
@@ -27,6 +25,16 @@
 	cmd = meld "$LOCAL" "$REMOTE"
 [pull]
 	rebase = true
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[fetch]
+	prune = true
+[rerere]
+	enabled = true
+[diff]
+	algorithm = histogram
 [merge]
 	tool = meld
 [color]
@@ -48,3 +56,7 @@
 	required = true
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
+
+# Настройки только для этой машины (credential helper и т.п.) — создаёт install.sh, в git не хранится.
+[include]
+	path = ~/.gitconfig.local
