@@ -51,6 +51,7 @@ brew "neovim"
 brew "tree-sitter-cli"
 brew "luarocks"
 brew "rust-analyzer"
+brew "clang-format"     # conform.nvim formats C/C++ with it (works on Intel and Apple Silicon)
 
 # -- Languages and runtimes ----------------------------------------------------
 brew "node"
