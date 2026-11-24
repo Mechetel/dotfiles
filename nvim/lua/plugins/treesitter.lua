@@ -1,8 +1,8 @@
 local parsers = {
-  "bash", "c", "cpp", "css", "csv", "dockerfile", "editorconfig", "embedded_template",
+  "bash", "c", "cpp", "css", "csv", "diff", "dockerfile", "editorconfig", "embedded_template",
   "git_rebase", "gitattributes", "gitcommit", "gitignore", "html", "ini",
-  "javascript", "json", "lua", "make", "markdown", "markdown_inline", "nginx", "perl",
-  "python", "rbs", "rst", "ruby", "rust", "scss", "slim", "sql", "toml", "tsv",
+  "javascript", "jsdoc", "json", "lua", "make", "markdown", "markdown_inline", "nginx", "perl",
+  "python", "rbs", "regex", "rst", "ruby", "rust", "scss", "slim", "sql", "toml", "tsv",
   "tsx", "typescript", "vim", "vimdoc", "xml", "yaml",
 }
 

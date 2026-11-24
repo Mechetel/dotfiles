@@ -282,20 +282,29 @@ vim.api.nvim_create_autocmd("FocusLost", {
 vim.opt.autowriteall = true
 
 
--- Function to strip trailing whitespace before saving
-local function strip_trailing_whitespaces()
-  local curr_line = vim.fn.line(".")
-  local curr_col = vim.fn.col(".")
+-- Strip trailing whitespace before saving.
+-- Not for Markdown (two trailing spaces are a hard line break), diffs and commit messages,
+-- and not for special buffers. `keeppatterns`/`keepjumps` keep the search register and
+-- jumplist untouched, and the window view (cursor + scroll) is restored afterwards.
+local keep_trailing_whitespace = {
+  markdown = true,
+  diff = true,
+  gitcommit = true,
+  gitrebase = true,
+}
 
-  -- Strip trailing whitespace from the entire file
-  vim.cmd("%s/\\s\\+$//e")
-
-  -- Restore cursor position
-  vim.fn.cursor(curr_line, curr_col)
-end
-
--- Set up the autocommand to run before saving any file
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*",
-  callback = strip_trailing_whitespaces,
+  callback = function(args)
+    local buf = args.buf
+    if not vim.bo[buf].modifiable or vim.bo[buf].binary or vim.bo[buf].buftype ~= "" then
+      return
+    end
+    if keep_trailing_whitespace[vim.bo[buf].filetype] then
+      return
+    end
+    local view = vim.fn.winsaveview()
+    vim.cmd([[keeppatterns keepjumps silent! %s/\s\+$//e]])
+    vim.fn.winrestview(view)
+  end,
 })

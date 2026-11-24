@@ -8,7 +8,7 @@ return {
       {
         "<leader>gf",
         function()
-          require("conform").format({ async = true, lsp_fallback = true })
+          require("conform").format({ async = true, lsp_format = "fallback" })
         end,
         mode = "",
         desc = "Format buffer",
@@ -31,25 +31,16 @@ return {
           scss = { "prettierd", "prettier", stop_after_first = true },
           markdown = { "prettierd", "prettier", stop_after_first = true },
           yaml = { "prettierd", "prettier", stop_after_first = true },
-          -- ruby = { "rubocop" }, -- Using rubocop via LSP instead
+          -- ruby: no formatter here on purpose - the rubocop LSP formats it (see lsp-config.lua)
         },
         formatters = {
-          ["clang-format"] = {
-            command = "/usr/local/opt/llvm/bin/clang-format", -- from `brew install llvm`
-          },
+          -- Prettier only runs in projects that have a Prettier config. Most Rails/esbuild
+          -- projects here do not, and running Prettier with its defaults reformats whole files.
+          -- Without a config, conform falls back to the LSP formatter (lsp_format below).
+          prettier = { require_cwd = true },
+          prettierd = { require_cwd = true },
           stylua = {
             args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
-          },
-          rubocop = {
-            timeout_ms = 5000,
-            cwd = require("conform.util").root_file({ "bin/rubocop", ".rubocop.yml" }),
-            command = function(self, ctx)
-              local rubocop_bin = vim.fs.find("bin/rubocop", { path = ctx.dirname, upward = true })[1]
-              if rubocop_bin then
-                return vim.fs.dirname(rubocop_bin) .. "/rubocop"
-              end
-              return "rubocop"
-            end,
           },
         },
         -- -- Format on save (optional)
@@ -69,30 +60,29 @@ return {
     config = function()
       local lint = require("lint")
 
+      -- Ruby is linted by the rubocop LSP, not here (that produced duplicate diagnostics).
       lint.linters_by_ft = {
-        ruby = { "rubocop" }, -- Using rubocop via LSP instead
-        -- Remove or comment out these if you don't have eslint_d installed
         javascript = { "eslint_d" },
         typescript = { "eslint_d" },
         javascriptreact = { "eslint_d" },
         typescriptreact = { "eslint_d" },
       }
 
-      -- Configure rubocop linter
-      lint.linters.rubocop.cmd = function()
-        local rubocop_bin = vim.fs.find("bin/rubocop", { upward = true })[1]
-        if rubocop_bin then
-          return vim.fs.dirname(rubocop_bin) .. "/rubocop"
-        end
-        return "rubocop"
-      end
+      -- Only a handful of projects have an ESLint config; elsewhere eslint_d would print
+      -- "couldn't find a configuration file" on every save.
+      local eslint_configs = {
+        ".eslintrc", ".eslintrc.js", ".eslintrc.cjs", ".eslintrc.json", ".eslintrc.yml", ".eslintrc.yaml",
+        "eslint.config.js", "eslint.config.mjs", "eslint.config.cjs", "eslint.config.ts",
+      }
 
-      -- Create autocommand to lint on specific events
       local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-
       vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
         group = lint_augroup,
-        callback = function()
+        callback = function(args)
+          local linters = lint.linters_by_ft[vim.bo[args.buf].filetype]
+          if linters and vim.tbl_contains(linters, "eslint_d") and not vim.fs.root(args.buf, eslint_configs) then
+            return
+          end
           lint.try_lint()
         end,
       })

@@ -97,6 +97,26 @@ start with a capital letter or end with a period, lines of at most 100 character
 `Merge`, `Revert "..."` and `fixup!`/`squash!` messages are skipped. To change the allowed
 types or rules, edit the top of the script. Run `tests/git-lc.test.sh` after any change.
 
+## Neovim (tuned for Rails + Slim/ERB + Stimulus)
+
+Plugins are pinned by `nvim/lazy-lock.json`; the first launch on a new machine installs the
+plugins, treesitter parsers, language servers and formatters (mason-tool-installer).
+
+- **Ruby:** RuboCop (through the project's bundle) is the only source of style diagnostics
+  and formatting; ruby-lsp handles navigation, completion and syntax errors. RuboCop starts
+  only in projects with a `.rubocop.yml` or `bin/rubocop`.
+- **Formatting:** `,gf` (conform). Prettier runs only in projects that have a Prettier
+  config, otherwise the LSP formatter is used; ESLint runs only where an ESLint config exists.
+- **Rails:** `tpope/vim-rails` (`:A` alternate file, `:Emodel`, `gf` on partials), tag
+  auto-closing in `*.erb`.
+- **Tests in tmux (vimux):** `,ts` runs the current test file, `,tr` the nearest test.
+  From `app/models/user.rb` it finds `spec/models/user_spec.rb` (RSpec) or
+  `test/models/user_test.rb` (Minitest).
+- **Search:** `,ff` files, `,fg` grep, `,fw` word under cursor, `,fb` buffers, `,fr`
+  resume, `,fd` diagnostics, `,fs` symbols; `log/`, `tmp/`, `node_modules/`, `public/assets/`
+  are ignored. LSP: `,gd` `,gr` `,ca` `,rn` (rename) `,e` (diagnostic float).
+- Trailing whitespace is stripped on save, except in Markdown, diffs and commit messages.
+
 ## Day-to-day
 
 ```bash
