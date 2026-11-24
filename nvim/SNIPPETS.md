@@ -1,67 +1,67 @@
-# Сниппеты в nvim
+# Snippets in nvim
 
-Сниппет — шаблон кода с «дырками» (плейсхолдерами), по которым прыгаешь `Tab`.
+A snippet is a code template with placeholders you jump through with `Tab`.
 
-## Откуда берутся
+## Where they come from
 
-| Источник | Как выглядит в меню | Что даёт |
+| Source | How it looks in the menu | What it gives you |
 |---|---|---|
-| **LuaSnip + friendly-snippets** | `Snippet`, справа `[rust]`/`[ruby]`… | готовые шаблоны для десятков языков |
-| **Свои** — `~/.dotfiles/nvim/snippets/` | `Snippet` | то, что вы написали сами |
-| **LSP** (rust-analyzer, ruby-lsp…) | `Snippet` / `Keyword` | шаблоны от языкового сервера: `for`, `match`, `impl`… |
+| **LuaSnip + friendly-snippets** | `Snippet`, `[rust]`/`[ruby]`... on the right | ready-made templates for dozens of languages |
+| **Your own** - `~/.dotfiles/nvim/snippets/` | `Snippet` | whatever you wrote yourself |
+| **LSP** (rust-analyzer, ruby-lsp...) | `Snippet` / `Keyword` | templates from the language server: `for`, `match`, `impl`... |
 
-Посмотреть все шаблоны текущего языка: `:lua for _,s in ipairs(require('luasnip').get_snippets(vim.bo.ft)) do print(s.trigger, s.name) end`
+List all templates of the current language: `:lua for _,s in ipairs(require('luasnip').get_snippets(vim.bo.ft)) do print(s.trigger, s.name) end`
 
-## Как пользоваться
+## How to use them
 
-1. В режиме вставки начните печатать префикс — например `for`, `tmod`, `println`.
-2. В меню выберите строку с типом **Snippet**: `Tab` / `Shift-Tab` — вниз/вверх по списку. Справа видно, во что он развернётся.
-3. `Enter` — развернуть.
-4. Курсор встанет на первый плейсхолдер (`${1:...}`). Печатайте — текст заменится.
-5. `Tab` — к следующему плейсхолдеру, `Shift-Tab` — назад. Последний (`$0`) — место, где курсор останется в конце.
+1. In insert mode start typing a prefix, e.g. `for`, `tmod`, `println`.
+2. In the menu pick the entry of type **Snippet**: `Tab` / `Shift-Tab` move down/up the list. The right side shows what it expands to.
+3. `Enter` expands it.
+4. The cursor lands on the first placeholder (`${1:...}`). Type to replace its text.
+5. `Tab` jumps to the next placeholder, `Shift-Tab` goes back. The last one (`$0`) is where the cursor ends up.
 
-Если меню открыто, `Tab` листает меню, а не прыгает по шаблону. Закройте меню `Ctrl-e` и снова жмите `Tab`.
+While the menu is open, `Tab` scrolls the menu instead of jumping through the template. Close the menu with `Ctrl-e` and press `Tab` again.
 
-Другие клавиши меню: `Ctrl-Space` — открыть вручную, `Ctrl-f` / `Ctrl-b` — листать документацию справа, `Ctrl-e` — закрыть.
+Other menu keys: `Ctrl-Space` opens it manually, `Ctrl-f` / `Ctrl-b` scroll the documentation on the right, `Ctrl-e` closes it.
 
-## Полезные готовые для Rust
+## Useful built-ins for Rust
 
-| Префикс | Во что разворачивается |
+| Prefix | Expands to |
 |---|---|
 | `for` | `for pat in expr { todo!(); }` |
-| `println`, `format`, `vec`, `assert_eq` | соответствующие макросы с плейсхолдерами |
-| `fn`, `pfn` | функция / pub функция |
-| `struct`, `enum`, `impl`, `trait` | заготовки типов |
-| `match`, `if let`, `while let` | конструкции с ветками |
-| `test`, `tmod` | тест / модуль с тестами (`tmod` — ваш) |
-| `dd` | `#[derive(Debug, Clone, PartialEq)]` (ваш) |
+| `println`, `format`, `vec`, `assert_eq` | the matching macros with placeholders |
+| `fn`, `pfn` | function / pub function |
+| `struct`, `enum`, `impl`, `trait` | type skeletons |
+| `match`, `if let`, `while let` | constructs with branches |
+| `test`, `tmod` | a test / a test module (`tmod` is yours) |
+| `dd` | `#[derive(Debug, Clone, PartialEq)]` (yours) |
 
-## Как добавить свой
+## Adding your own
 
-Файлы — в `~/.dotfiles/nvim/snippets/`, формат как в VS Code:
+Put files in `~/.dotfiles/nvim/snippets/`, in the VS Code format:
 
 ```json
 {
-  "Название": {
-    "prefix": "триггер",
+  "Name": {
+    "prefix": "trigger",
     "body": [
-      "строка с ${1:первым плейсхолдером}",
-      "и ${2:вторым}, курсор в конце: $0"
+      "a line with ${1:the first placeholder}",
+      "and ${2:the second}, cursor at the end: $0"
     ],
-    "description": "подсказка в меню"
+    "description": "hint shown in the menu"
   }
 }
 ```
 
-- `${1:текст}` — плейсхолдер с текстом по умолчанию, `$1` — пустой.
-- Одинаковый номер в двух местах (`$1 ... $1`) — печатаете один раз, меняется в обоих.
-- `${1|a,b,c|}` — выбор из вариантов.
-- `$0` — где закончить.
+- `${1:text}` is a placeholder with default text, `$1` is an empty one.
+- The same number in two places (`$1 ... $1`) means you type once and both change.
+- `${1|a,b,c|}` is a choice among options.
+- `$0` is where the cursor finishes.
 
-**Для нового языка** создайте `<язык>.json` и добавьте строку в `snippets/package.json`:
+**For a new language** create `<language>.json` and add a line to `snippets/package.json`:
 
 ```json
 { "language": "ruby", "path": "./ruby.json" }
 ```
 
-После правки перезапустите nvim.
+Restart nvim after editing.

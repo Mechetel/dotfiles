@@ -1,4 +1,4 @@
-# ВНЕ репозитория: тут лежат секретные ключи, а репозиторий публичный.
+# Outside the repository on purpose: this holds secret keys and the repository is public.
 GPG_BACKUP_DIR="${GPG_BACKUP_DIR:-$HOME/.local/share/gpg-backup}"
 USER_EMAIL="dima.homa5@gmail.com"
 

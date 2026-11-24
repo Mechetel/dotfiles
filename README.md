@@ -1,100 +1,124 @@
 # dotfiles
 
-Конфиги macOS-окружения: zsh (oh-my-zsh + powerlevel10k), tmux, neovim, kitty, git, ranger,
-Karabiner, VS Code. Всё ставится одной командой, **всегда последние версии** (в `Brewfile`
-версии не закреплены).
+macOS environment configs: zsh (oh-my-zsh + powerlevel10k), tmux, neovim, kitty, git, ranger,
+Karabiner, VS Code. Everything installs with one command and **always gets the latest
+versions** (nothing is pinned in the `Brewfile`).
 
-## Установка на новом Mac
+## Install on a new Mac
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Mechetel/dotfiles/master/bootstrap.sh)"
 ```
 
-Скрипт поставит Xcode Command Line Tools, клонирует репозиторий в `~/.dotfiles` и запустит
-`install.sh`. То же вручную:
+The script installs the Xcode Command Line Tools, clones this repository into `~/.dotfiles`
+and runs `install.sh`. The manual equivalent:
 
 ```bash
 git clone https://github.com/Mechetel/dotfiles.git ~/.dotfiles
 ~/.dotfiles/install.sh
 ```
 
-Флаги `install.sh` (можно передавать и в `bootstrap.sh`):
+`install.sh` flags (they can also be passed to `bootstrap.sh`):
 
-| Флаг | Что делает |
+| Flag | What it does |
 |---|---|
-| `--dry-run` | показать шаги, ничего не меняя |
-| `--no-apps` | без GUI-приложений (`Brewfile.apps`) |
-| `--no-brew` | без brew вообще — только линки и шелл |
-| `--no-vscode` | не ставить расширения VS Code |
-| `--macos` | применить системные настройки (`scripts/macos.sh`) |
+| `--dry-run` | show the steps without changing anything |
+| `--no-apps` | skip GUI applications (`Brewfile.apps`) |
+| `--no-brew` | skip brew entirely - only links and shell setup |
+| `--no-vscode` | do not install VS Code extensions |
+| `--macos` | apply macOS system defaults (`scripts/macos.sh`) |
 
-Установщик идемпотентен — безопасно запускать повторно после `git pull`.
-Существующие файлы **не затираются**: они переезжают в `~/.dotfiles-backup/<дата>/`.
+The installer is idempotent, so it is safe to re-run after a `git pull`. Existing files are
+**never overwritten**: they are moved to `~/.dotfiles-backup/<timestamp>/`.
 
-### Что происходит по шагам
+### What happens, step by step
 
-1. **Homebrew** (если нет) → `Brewfile` (CLI, рантаймы, шрифты) → `Brewfile.apps` (GUI, Mac App Store)
-2. **oh-my-zsh**, плагины (autosuggestions, syntax-highlighting, completions), **powerlevel10k**, **tpm** — `scripts/shell.sh`
-3. Шрифт «Fira Code Freeze» из `fonts/` → `~/Library/Fonts`
-4. **Симлинки** в `$HOME` — `scripts/link.sh`
-5. Локальные файлы `~/.gitconfig.local`, `~/.zshrc.local` (в git не попадают)
-6. Расширения VS Code (`vscode/extensions.txt`), плагины neovim (строго по `nvim/lazy-lock.json`), глобальные npm-пакеты (`packages/npm.txt`)
+1. **Homebrew** (if missing) -> `Brewfile` (CLI, runtimes, fonts) -> `Brewfile.apps` (GUI, Mac App Store)
+2. **oh-my-zsh**, plugins (autosuggestions, syntax-highlighting, completions), **powerlevel10k**, **tpm** - `scripts/shell.sh`
+3. The "Fira Code Freeze" font from `fonts/` -> `~/Library/Fonts`
+4. **Symlinks** into `$HOME` - `scripts/link.sh`
+5. Local files `~/.gitconfig.local` and `~/.zshrc.local` (never tracked)
+6. VS Code extensions (`vscode/extensions.txt`) and neovim plugins (pinned by `nvim/lazy-lock.json`)
 
-### Что остаётся руками
+### Still manual
 
-Секреты в репозиторий **не** кладутся — он публичный.
+No secrets are stored in this repository - it is public.
 
 - `gh auth login`, `glab auth login`
-- SSH- и GPG-ключи — из менеджера паролей / бэкапа (`gpg-backup` / `gpg-restore` работают с `~/.local/share/gpg-backup`, не с репозиторием)
-- Ruby: [rvm](https://rvm.io), затем `rvm install <версия>`
-- Node: `nvm install --lts` (nvm подгружается лениво)
-- Karabiner-Elements, Docker Desktop — первый запуск и разрешения в Системных настройках
-- Приложения вне brew: Adobe CC, Microsoft Office, Mathematica, ClearVPN, Folx и др.
+- SSH and GPG keys: restore them from your password manager / backup (`gpg-backup` and
+  `gpg-restore` use `~/.local/share/gpg-backup`, never the repository)
+- Ruby: install [rvm](https://rvm.io), then `rvm install <version>`
+- Node: `nvm install --lts` (nvm is lazy-loaded)
+- Karabiner-Elements and Docker Desktop: first launch and permissions in System Settings
+- Apps outside brew: Adobe CC, Microsoft Office, Mathematica, ClearVPN, Folx, ...
 
-## Структура
+## Layout
 
 ```
-bootstrap.sh          # curl-точка входа: CLT + clone + install.sh
-install.sh            # оркестратор
-Brewfile              # CLI, рантаймы, шрифты (без версий)
-Brewfile.apps         # GUI-приложения и Mac App Store
+bootstrap.sh          # curl entry point: CLT + clone + install.sh
+install.sh            # orchestrator
+Brewfile              # CLI, runtimes, fonts (unpinned)
+Brewfile.apps         # GUI applications and Mac App Store
+bin/git-lc            # linted git commit (see below); bin/ is on PATH
 scripts/
-  link.sh             # симлинки с бэкапом (+ --dry-run); список файлов — массив LINKS
-  shell.sh            # oh-my-zsh, плагины, p10k, tpm
-  macos.sh            # defaults write (по флагу --macos)
-  snapshot.sh         # что стоит, но не записано в Brewfile; --vscode обновляет расширения
-  doctor.sh           # проверка ссылок, инструментов, секретов, скорости zsh
-zshrc  zsh/*.sh       # конфиг zsh; алиасы/функции/биндинги по темам
+  link.sh             # symlinks with backup (+ --dry-run); the file list is the LINKS array
+  shell.sh            # oh-my-zsh, plugins, p10k, tpm
+  macos.sh            # defaults write (opt-in via --macos)
+  snapshot.sh         # installed but not in the Brewfiles; --vscode refreshes extensions
+  doctor.sh           # checks links, tools, secrets and zsh startup time
+tests/git-lc.test.sh  # tests for git-lc
+zshrc  zsh/*.sh       # zsh config; aliases/functions/key bindings split by topic
 p10k.zsh starship.toml
-gitconfig gitignore_global commitlintrc.yml
-tmux.conf tmux/       # + тема dracula, биндинги
-nvim/                 # lazy.nvim, lazy-lock.json закрепляет версии плагинов
-kitty/ karabiner/ ranger/ vscode/ fonts/ packages/
-archive/              # старое (nvim-old, zsh-trash) — не используется
+gitconfig gitignore_global
+tmux.conf tmux/       # + dracula theme and key bindings
+nvim/                 # lazy.nvim; lazy-lock.json pins plugin versions
+kitty/ karabiner/ ranger/ vscode/ fonts/
+archive/              # old stuff (nvim-old, zsh-trash) - not used
 ```
 
-## Как пользоваться
+## git-lc: linted commits without npm
+
+`bin/git-lc` is a dependency-free bash replacement for the `commitlint` +
+`linted-git-commit` npm packages. It checks the message against Conventional Commits and
+only then runs `git commit`:
 
 ```bash
-scripts/doctor.sh       # всё ли на месте, нет ли секретов, как быстро стартует zsh
-scripts/snapshot.sh     # что поставил на этом Mac, но забыл записать
+lc -m "feat(auth): add login"        # alias for git-lc; `git lc ...` works too
+lc -m "fix: bug" -m "Details..."     # several -m become paragraphs
+lcn -m "chore: wip"                  # --no-verify
+lc! -m "fix: typo"                   # --amend
+git-lc --check .git/COMMIT_EDITMSG   # lint only (or `-` for stdin); usable as a commit-msg hook
+git-lc -h                            # types and rules
+```
+
+Types: `chore ci feat fix docs style refactor perf test revert`. The rules follow
+`@commitlint/config-conventional`: lower-case type and scope, non-empty subject that does not
+start with a capital letter or end with a period, lines of at most 100 characters.
+`Merge`, `Revert "..."` and `fixup!`/`squash!` messages are skipped. To change the allowed
+types or rules, edit the top of the script. Run `tests/git-lc.test.sh` after any change.
+
+## Day-to-day
+
+```bash
+scripts/doctor.sh          # is everything in place, any secrets, how fast does zsh start
+scripts/snapshot.sh        # what did I install on this Mac and forget to record
 scripts/link.sh --dry-run
 ```
 
-**Добавить новый конфиг** — положить файл в репозиторий и добавить строку в массив `LINKS`
-в `scripts/link.sh`: `"путь-в-репо|путь-от-$HOME"`.
+**Add a new config:** put the file in the repository and add a line to the `LINKS` array in
+`scripts/link.sh`: `"path-in-repo|path-from-$HOME"`.
 
-**Поставил новую программу** — допиши её в `Brewfile`/`Brewfile.apps` (`scripts/snapshot.sh`
-подскажет, чего не хватает) и закоммить.
+**Installed a new program:** add it to `Brewfile` / `Brewfile.apps` (`scripts/snapshot.sh`
+tells you what is missing) and commit.
 
-**Настройки только для этого компьютера** (токены, закреплённые версии) — `~/.zshrc.local`
-и `~/.gitconfig.local`. Они не в git. Пример: на старом Mac там лежит
+**Settings for this computer only** (tokens, pinned versions): `~/.zshrc.local` and
+`~/.gitconfig.local`. They are not tracked. Example: on the old Mac `~/.zshrc.local` holds
 `path=(/usr/local/opt/node@20/bin /usr/local/opt/mysql@5.7/bin $path)`.
 
-## Заметки
+## Notes
 
-- Работает и на Intel (`/usr/local`), и на Apple Silicon (`/opt/homebrew`): префикс brew
-  определяется автоматически, в путях нет `/Users/<имя>`.
-- Старт zsh ~0,5 с (было ~1,8 с): `nvm` грузится лениво, обновления oh-my-zsh отключены.
-- Репозиторий публичный: `.gitignore` закрывает `secrets/`, `*.local`, ключи и токены, а
-  `scripts/doctor.sh` ищет похожее на секреты в отслеживаемых файлах.
+- Works on Intel (`/usr/local`) and Apple Silicon (`/opt/homebrew`): the brew prefix is
+  detected automatically and there is no `/Users/<name>` in any path.
+- zsh starts in ~0.5 s (it was ~1.8 s): `nvm` is lazy-loaded and oh-my-zsh update checks are off.
+- The repository is public: `.gitignore` blocks `secrets/`, `*.local`, keys and tokens, and
+  `scripts/doctor.sh` scans tracked files for anything that looks like a secret.

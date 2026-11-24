@@ -25,10 +25,10 @@ alias gst="git stash"
 alias gsta="git stash apply"
 alias gsts="git stash show"
 
-alias lc="linted-git-commit"
-alias lcn="linted-git-commit --no-verify"
-alias lc!="linted-git-commit --amend"
-alias lcn!="linted-git-commit --no-verify --amend"
+alias lc="git-lc"
+alias lcn="git-lc --no-verify"
+alias lc!="git-lc --amend"
+alias lcn!="git-lc --no-verify --amend"
 
 # !!! DANGER ZONE !!!
 alias gco-all="git checkout -- ."

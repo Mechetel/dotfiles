@@ -1,16 +1,16 @@
-# GUI-приложения. Отдельно от Brewfile, чтобы CLI-часть ставилась и без них:
+# GUI applications. Kept apart from the Brewfile so the CLI part installs without them:
 #   ./install.sh --no-apps
 #   brew bundle --file=~/.dotfiles/Brewfile.apps
 #
-# Версии не закреплены — cask всегда последний.
+# Versions are not pinned - a cask is always the latest.
 
-# ── Терминалы и редакторы ────────────────────────────────────────────────────
+# -- Terminals and editors -----------------------------------------------------
 cask "kitty"
 cask "iterm2"
 cask "visual-studio-code"
-cask "karabiner-elements"   # конфиг: karabiner/karabiner.json
+cask "karabiner-elements"   # config: karabiner/karabiner.json
 
-# ── Разработка ───────────────────────────────────────────────────────────────
+# -- Development ---------------------------------------------------------------
 cask "docker-desktop"
 cask "postgres-unofficial"  # Postgres.app
 cask "pgadmin4"
@@ -20,7 +20,7 @@ cask "copilot-cli"
 cask "drawio"
 cask "figma"
 
-# ── Браузер и общение ────────────────────────────────────────────────────────
+# -- Browser and chat ----------------------------------------------------------
 cask "google-chrome"
 cask "slack"
 cask "telegram"
@@ -29,11 +29,11 @@ cask "zoom"
 cask "microsoft-teams"
 cask "webex"
 
-# ── ИИ ───────────────────────────────────────────────────────────────────────
+# -- AI ------------------------------------------------------------------------
 cask "claude"
 cask "chatgpt"
 
-# ── Утилиты ──────────────────────────────────────────────────────────────────
+# -- Utilities -----------------------------------------------------------------
 cask "bartender"
 cask "adguard"
 cask "coconutbattery"
@@ -44,12 +44,12 @@ cask "loom"
 cask "libreoffice"
 cask "mendeley-reference-manager"
 
-# ── Mac App Store (нужен вход в App Store; id — из `mas search`) ─────────────
+# -- Mac App Store (needs an App Store sign-in; ids come from `mas search`) ----
 mas "Xcode",    id: 497799835
 mas "Keynote",  id: 409183694
 mas "Numbers",  id: 409203825
 mas "Pages",    id: 409201541
 mas "WireGuard", id: 1451685025
 
-# Ставятся вручную / не в brew: Adobe CC 2020, Microsoft Office, Mathematica,
-# ClearVPN, Folx, KeyKey, CopyClip — см. README.
+# Installed by hand / not in brew: Adobe CC 2020, Microsoft Office, Mathematica,
+# ClearVPN, Folx, KeyKey, CopyClip - see the README.

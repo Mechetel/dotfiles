@@ -124,113 +124,113 @@ vim.keymap.set("n", "<C-j>", "<C-w>j", { noremap = true })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { noremap = true })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { noremap = true })
 
-vim.keymap.set("", "gh", "0", { noremap = true })  -- початок рядка
-vim.keymap.set("", "gi", "^", { noremap = true })  -- перший непробільний символ
-vim.keymap.set("", "gl", "g_", { noremap = true }) -- кінець рядка (ігноруючи \n)
-vim.keymap.set("", "gj", "G", { noremap = true })  -- в кінець файлу
-vim.keymap.set("", "gk", "gg", { noremap = true }) -- на початок файлу
+vim.keymap.set("", "gh", "0", { noremap = true })  -- start of line
+vim.keymap.set("", "gi", "^", { noremap = true })  -- first non-blank character
+vim.keymap.set("", "gl", "g_", { noremap = true }) -- end of line (ignoring \n)
+vim.keymap.set("", "gj", "G", { noremap = true })  -- end of file
+vim.keymap.set("", "gk", "gg", { noremap = true }) -- start of file
 
--- В інсерт-режимі вставка з реєстру
+-- Insert mode: paste from register
 vim.keymap.set("i", "<C-r>", "<C-r><C-p>", { noremap = true })
 
--- В інсерт-режимі вставка з системного буфера
+-- Insert mode: paste from the system clipboard
 vim.keymap.set("i", "<M-p>", "<C-r><C-p>+", { noremap = true })
 
--- У командному режимі вставка з системного буфера
+-- Command mode: paste from the system clipboard
 vim.keymap.set("c", "<M-p>", "<C-r>+", { noremap = true })
 
--- Вставка з буфера обміну
+-- Paste from the clipboard
 vim.keymap.set({"n", "v"}, "p", '"+p', { noremap = true })
 vim.keymap.set({"n", "v"}, "<M-p>", "p", { noremap = true })
 
 vim.keymap.set({"n", "v"}, "P", '"+P', { noremap = true })
 vim.keymap.set({"n", "v"}, "<M-P>", "P", { noremap = true })
 
--- Копіювання в буфер обміну
+-- Copy to the clipboard
 vim.keymap.set({"n", "v"}, "y", '"+y', { noremap = true })
 vim.keymap.set({"n", "v"}, "<M-y>", "y", { noremap = true })
 
 vim.keymap.set("n", "Y", '"+y$', { noremap = true })
 vim.keymap.set({"n", "v"}, "<M-Y>", "y$", { noremap = true })
 
--- Вирізання в буфер обміну
+-- Cut to the clipboard
 vim.keymap.set("n", ",d", '"+d', { noremap = true })
 vim.keymap.set("v", ",d", '"+d', { noremap = true })
 vim.keymap.set("n", ",D", '"+D', { noremap = true })
 vim.keymap.set("v", ",D", '"+D', { noremap = true })
 
--- <C-u> в інсерт-режимі для видалення до початку рядка без зміни undo
+-- <C-u> in insert mode: delete to start of line, keeping undo history intact
 vim.keymap.set("i", "<C-u>", "<C-g>u<C-u>", { noremap = true })
--- <C-d> переналаштовано на <Del> в інсерт-режимі
+-- <C-d> remapped to <Del> in insert mode
 vim.keymap.set("i", "<C-d>", "<Del>", { noremap = true })
 
--- Пошук вперед з very magic у нормальному і візуальному режимах
+-- Forward search with very magic in normal and visual modes
 vim.keymap.set({"n", "v"}, "/", "/\\v", { noremap = true })
--- Пошук назад з very magic у нормальному і візуальному режимах
+-- Backward search with very magic in normal and visual modes
 vim.keymap.set({"n", "v"}, "?", "?\\v", { noremap = true })
 
--- Глобальна заміна в усьому файлі в нормальному режимі
+-- Substitute across the whole file (normal mode)
 vim.keymap.set("n", "dm", ":%s:::g<left><left><left>", { noremap = true })
--- Заміна для виділеного тексту у візуальному режимі
+-- Substitute within the selection (visual mode)
 vim.keymap.set("v", "dm", ":s:::g<left><left><left>", { noremap = true })
 
--- Перехід до командного рядка з режимом вставки після q:
+-- Enter insert mode in the command-line window after q:
 vim.keymap.set("n", "q:", "q:i", { noremap = true })
--- Перехід до пошуку вперед з режимом вставки після q/
+-- Enter insert mode in the forward-search window after q/
 vim.keymap.set("n", "q/", "q/i", { noremap = true })
--- Перехід до пошуку назад з режимом вставки після q?
+-- Enter insert mode in the backward-search window after q?
 vim.keymap.set("n", "q?", "q?i", { noremap = true })
 
--- Розгортання блоку на рівень вище з відображенням рівня складання
+-- Open one fold level and show the fold level
 vim.keymap.set("n", "zr", "zr:echo &foldlevel<CR>", { noremap = true })
--- Складання блоку на рівень вище з відображенням рівня складання
+-- Close one fold level and show the fold level
 vim.keymap.set("n", "zm", "zm:echo &foldlevel<CR>", { noremap = true })
--- Розгортання всіх блоків з відображенням рівня складання
+-- Open all folds and show the fold level
 vim.keymap.set("n", "zR", "zR:echo &foldlevel<CR>", { noremap = true })
--- Згортання всіх блоків з відображенням рівня складання
+-- Close all folds and show the fold level
 vim.keymap.set("n", "zM", "zM:echo &foldlevel<CR>", { noremap = true })
 
--- Після переходу до попереднього місця, переміщаємо курсор в центр екрану
+-- After jumping back, center the cursor on screen
 vim.keymap.set("n", "<C-o>", "<C-o>zz", { noremap = true, silent = true })
--- Після переходу до наступного місця, переміщаємо курсор в центр екрану
+-- After jumping forward, center the cursor on screen
 vim.keymap.set("n", "<C-i>", "<C-i>zz", { noremap = true, silent = true })
 
--- Зсув вліво, збереження візуального режиму
+-- Shift left, keep the visual selection
 vim.keymap.set("v", "<", "<gv", { noremap = true })
--- Зсув вправо, збереження візуального режиму
+-- Shift right, keep the visual selection
 vim.keymap.set("v", ">", ">gv", { noremap = true })
 
 vim.keymap.set("n", "gp", function()
   return "`[" .. vim.fn.strpart(vim.fn.getregtype(), 0, 1) .. "`]"
 end, { noremap = true, expr = true })
 
--- Відкриває вертикальний спліт і переміщає курсор у нове вікно
+-- Open a vertical split and move the cursor into it
 vim.keymap.set("n", "<leader>v", "<C-w>v<C-w>l", { noremap = true })
--- Відкриває горизонтальний спліт
+-- Open a horizontal split
 vim.keymap.set("n", "<leader>s", "<C-w>s", { noremap = true })
--- Виконує вертикальне сортування буферів
+-- Show all buffers in vertical splits
 vim.keymap.set("n", "<leader>vsa", ":vert sba<CR>", { noremap = true })
 
--- Створення нової вкладки
+-- Create a new tab
 vim.keymap.set("n", "<leader>tn", ":tab spl<CR>", { noremap = true })
--- Закриття поточної вкладки
+-- Close the current tab
 vim.keymap.set("n", "<leader>tc", ":tabclose<CR>", { noremap = true })
 
--- Перемикання відображення невидимих символів
+-- Toggle invisible characters
 vim.keymap.set("n", "<leader>l", ":set list! list?<CR>", { noremap = true })
--- Очищення підсвічування пошуку
+-- Clear search highlighting
 vim.keymap.set("n", "<BS>", ":noh<CR>", { noremap = true })
--- Виділення від поточної позиції до кінця рядка
+-- Select from the cursor to the end of the line
 vim.keymap.set("n", "<M-v>", "vg_", { noremap = true })
--- <C-s> переназначено на <C-a>
+-- <C-s> remapped to <C-a>
 vim.keymap.set("n", "<C-s>", "<C-a>", { noremap = true })
--- Перезавантаження конфігурації Vim
+-- Reload the Vim configuration
 vim.keymap.set("n", "<leader>R", ":so $MYVIMRC<CR>", { noremap = true })
 
--- Базові опції
+-- Base options
 local opts = { noremap = true, silent = true }
 
--- <C-s> переназначено на <C-a>
+-- <C-s> remapped to <C-a>
 vim.keymap.set("n", "<C-s>", "<C-a>", opts)
 
 -- Terminal mode
@@ -240,7 +240,7 @@ vim.keymap.set("t", "<Right>", "<C-\\><C-n>:bnext<CR>", opts)
 vim.keymap.set("t", "<Up>", "<C-\\><C-n>:tabnext<CR>", opts)
 vim.keymap.set("t", "<Down>", "<C-\\><C-n>:tabprev<CR>", opts)
 
--- Переміщення рядків
+-- Move lines
 vim.keymap.set("n", "<C-S-Down>", ":m+<CR>==", opts)
 vim.keymap.set("n", "<C-S-Up>", ":m-2<CR>==", opts)
 vim.keymap.set("i", "<C-S-Down>", "<Esc>:m+<CR>==gi", opts)
@@ -248,11 +248,11 @@ vim.keymap.set("i", "<C-S-Up>", "<Esc>:m-2<CR>==gi", opts)
 vim.keymap.set("v", "<C-S-Down>", ":m'>+<CR>gv=gv", opts)
 vim.keymap.set("v", "<C-S-Up>", ":m-2<CR>gv=gv", opts)
 
--- IndentWise (без noremap, бо це <Plug>)
+-- IndentWise (no noremap, because these are <Plug> mappings)
 vim.keymap.set({"n", "v"}, "K", "<Plug>(IndentWiseBlockScopeBoundaryBegin)", { silent = true })
 vim.keymap.set({"n", "v"}, "J", "<Plug>(IndentWiseBlockScopeBoundaryEnd)", { silent = true })
 
--- Звичайне J на <M-i> (Alt+i)
+-- Plain J on <M-i> (Alt+i)
 vim.keymap.set("n", "<M-i>", "J", opts)
 
 -- Delete to beginning of line (already default, but explicit)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Общие функции для скриптов dotfiles. Подключается через `. scripts/lib.sh`.
-# Совместимо с bash 3.2 (системный bash на macOS): без ассоциативных массивов.
+# Shared helpers for the dotfiles scripts. Source it with `. scripts/lib.sh`.
+# Compatible with bash 3.2 (the system bash on macOS): no associative arrays.
 
 DOTFILES="${DOTFILES:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 DRY_RUN="${DRY_RUN:-0}"
@@ -21,7 +21,7 @@ die()  { err "$*"; exit 1; }
 is_mac()  { [ "$(uname -s)" = "Darwin" ]; }
 have()    { command -v "$1" >/dev/null 2>&1; }
 
-# Выполнить команду (или только показать её при --dry-run).
+# Run a command (or only print it when DRY_RUN=1).
 run() {
   if [ "$DRY_RUN" = 1 ]; then
     printf '  %s[dry-run]%s %s\n' "$C_DIM" "$C_OFF" "$*"
@@ -30,7 +30,7 @@ run() {
   fi
 }
 
-# Найти brew и добавить его в окружение текущего скрипта (Apple Silicon / Intel).
+# Find brew and load it into the environment of the current script (Apple Silicon / Intel / Linux).
 load_brew() {
   local b
   for b in /opt/homebrew/bin/brew /usr/local/bin/brew /home/linuxbrew/.linuxbrew/bin/brew; do

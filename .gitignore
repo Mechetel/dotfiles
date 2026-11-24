@@ -1,4 +1,4 @@
-# ── Секреты: репозиторий ПУБЛИЧНЫЙ ──────────────────────────────────────────
+# ── Secrets: this repository is PUBLIC ────────────────────────────────────
 secrets/
 *.local
 .env
@@ -11,7 +11,7 @@ id_ed25519*
 .netrc
 .git-credentials
 
-# ── Локальное состояние и шум ───────────────────────────────────────────────
+# ── Local state and noise ─────────────────────────────────────────────────
 .DS_Store
 .cache
 __pycache__/
@@ -25,4 +25,3 @@ ranger/tagged
 tmux/plugins/*
 !tmux/plugins/tpm
 nvim/.netrwhist
-commitlint/node_modules

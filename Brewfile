@@ -1,32 +1,32 @@
-# CLI-инструменты, рантаймы и шрифты. Версии НЕ закреплены: на новом компьютере
-# ставятся последние (никаких mysql@5.7 / python@3.10 / node@20).
+# CLI tools, runtimes and fonts. Versions are NOT pinned: a new computer gets the latest
+# of everything (no mysql@5.7 / python@3.10 / node@20).
 #
-#   brew bundle --file=~/.dotfiles/Brewfile        # поставить всё
-#   brew bundle check --file=~/.dotfiles/Brewfile  # чего не хватает
-#   scripts/snapshot.sh                            # что стоит в системе, но не записано здесь
+#   brew bundle --file=~/.dotfiles/Brewfile        # install everything
+#   brew bundle check --file=~/.dotfiles/Brewfile  # what is missing
+#   scripts/snapshot.sh                            # installed here but not recorded below
 #
-# Транзитивные зависимости (libheif, nettle, harfbuzz …) сюда не вносятся —
-# brew подтянет их сам.
+# Transitive dependencies (libheif, nettle, harfbuzz ...) are intentionally not listed:
+# brew pulls them in by itself.
 
-# ── Taps ─────────────────────────────────────────────────────────────────────
-# Сторонние tap-ы в новом brew надо «доверять» явно — install.sh делает
-# `brew trust` для тапов ниже; вручную: brew trust heroku/brew stripe/stripe-cli
+# -- Taps ----------------------------------------------------------------------
+# Recent brew versions require third-party taps to be trusted explicitly. install.sh runs
+# `brew trust` for the taps below; by hand: brew trust heroku/brew stripe/stripe-cli
 tap "heroku/brew"
 tap "stripe/stripe-cli"
 
-# ── Оболочка и терминал ──────────────────────────────────────────────────────
+# -- Shell and terminal --------------------------------------------------------
 brew "zsh"
 brew "tmux"
-brew "starship"          # запасной промпт (основной — powerlevel10k)
+brew "starship"          # fallback prompt (powerlevel10k is the main one)
 brew "fzf"
 brew "ripgrep"
 brew "fd"
 brew "the_silver_searcher"
 brew "tree"
 brew "htop"
-brew "fastfetch"          # замена neofetch (тот заархивирован и убран из brew)
+brew "fastfetch"         # replacement for neofetch (archived and removed from brew)
 brew "ranger"
-brew "highlight"         # подсветка в превью ranger
+brew "highlight"         # syntax highlighting in ranger previews
 brew "jq"
 brew "wget"
 brew "coreutils"
@@ -34,33 +34,33 @@ brew "telnet"
 brew "rclone"
 brew "mkcert"
 
-# ── Git ──────────────────────────────────────────────────────────────────────
+# -- Git -----------------------------------------------------------------------
 brew "git"
-brew "git-lfs"           # в gitconfig прописан lfs-фильтр
+brew "git-lfs"           # gitconfig defines the lfs filter
 brew "git-flow"
 brew "git-crypt"
 brew "gh"
 brew "glab"
-brew "diff-so-fancy"     # core.pager в gitconfig
+brew "diff-so-fancy"     # core.pager in gitconfig
 brew "gitlab-runner"
 brew "gnupg"
 brew "pinentry-mac"
 
-# ── Редактор ─────────────────────────────────────────────────────────────────
+# -- Editor --------------------------------------------------------------------
 brew "neovim"
 brew "tree-sitter-cli"
 brew "luarocks"
 brew "rust-analyzer"
 
-# ── Языки и рантаймы ─────────────────────────────────────────────────────────
+# -- Languages and runtimes ----------------------------------------------------
 brew "node"
 brew "nvm"
 brew "yarn"
 brew "python"
 brew "rust"
-brew "ruby-build"        # ruby ставится через rvm (см. README), это для rbenv-совместимости
+brew "ruby-build"        # ruby itself comes from rvm (see README); this is for rbenv compatibility
 brew "asdf"
-# нативные зависимости гемов (rails: nokogiri, psych, pg, mysql2 …)
+# native dependencies of gems (rails: nokogiri, psych, pg, mysql2 ...)
 brew "openssl@3"
 brew "libyaml"
 brew "libxslt"
@@ -68,7 +68,7 @@ brew "icu4c"
 brew "libpq"
 brew "readline"
 
-# ── Базы данных и сервисы ────────────────────────────────────────────────────
+# -- Databases and services ----------------------------------------------------
 brew "mysql"
 brew "postgresql@18"
 brew "pgloader"
@@ -76,7 +76,7 @@ brew "redis"
 brew "meilisearch"
 brew "kafka"
 
-# ── Медиа ────────────────────────────────────────────────────────────────────
+# -- Media ---------------------------------------------------------------------
 brew "ffmpeg"
 brew "imagemagick"
 brew "vips"
@@ -84,22 +84,22 @@ brew "graphviz"
 brew "ghostscript"
 brew "tesseract"
 
-# ── Прочее ───────────────────────────────────────────────────────────────────
+# -- Misc ----------------------------------------------------------------------
 brew "exercism"
 brew "mpich"
-brew "mas"               # Mac App Store из командной строки (см. Brewfile.apps)
+brew "mas"               # Mac App Store from the command line (see Brewfile.apps)
 brew "heroku/brew/heroku"
 brew "stripe/stripe-cli/stripe"
 
-# ── Шрифты (kitty/vscode/p10k) ───────────────────────────────────────────────
+# -- Fonts (kitty / vscode / p10k) ---------------------------------------------
 cask "font-fira-code"
 cask "font-hack-nerd-font"
-cask "font-meslo-lg-nerd-font"   # MesloLGS NF — шрифт терминала vscode / p10k
+cask "font-meslo-lg-nerd-font"   # MesloLGS NF - the vscode terminal / p10k font
 
-# ── Хочется попробовать (раскомментируй) ─────────────────────────────────────
-# brew "bat"        # cat с подсветкой
-# brew "eza"        # современный ls
-# brew "zoxide"     # умный cd
-# brew "git-delta"  # красивый git diff (замена diff-so-fancy)
+# -- Worth trying (uncomment) --------------------------------------------------
+# brew "bat"        # cat with syntax highlighting
+# brew "eza"        # modern ls
+# brew "zoxide"     # smarter cd
+# brew "git-delta"  # prettier git diff (replaces diff-so-fancy)
 # brew "lazygit"
-# brew "mise"       # один менеджер вместо nvm + rvm + asdf
+# brew "mise"       # one version manager instead of nvm + rvm + asdf

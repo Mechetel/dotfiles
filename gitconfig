@@ -57,6 +57,6 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 
-# Настройки только для этой машины (credential helper и т.п.) — создаёт install.sh, в git не хранится.
+# Machine-specific settings (credential helper etc.) - created by install.sh, not tracked in git.
 [include]
 	path = ~/.gitconfig.local
