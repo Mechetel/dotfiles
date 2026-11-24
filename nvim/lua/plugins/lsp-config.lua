@@ -12,10 +12,8 @@ return {
         ensure_installed = {
           "lua_ls",
           "ruby_lsp",
-          "ts_ls",
-          "stimulus_ls",
           "rubocop",
-          "hls",
+          "ts_ls",
         },
       })
     end,
@@ -28,11 +26,10 @@ return {
       local servers = {
         "ts_ls",
         "lua_ls",
-        "stimulus_ls",
         "rubocop",
         "ruby_lsp",
-        "hls",
         "purescriptls",
+        "clangd",
       }
 
       for _, server in ipairs(servers) do
@@ -40,6 +37,22 @@ return {
           capabilities = capabilities,
         })
       end
+
+      -- Prevent RuboCop from trying to use its background server daemon,
+      -- which causes "No such file or directory" errors on status file per project.
+      vim.lsp.config("rubocop", {
+        capabilities = capabilities,
+        cmd = { "bundle", "exec", "rubocop", "--lsp", "--no-server" },
+      })
+
+      -- ruby-lsp answers semantic token requests Neovim has already cancelled,
+      -- which shows up as "NO_RESULT_CALLBACK_FOUND"; treesitter highlights Ruby anyway.
+      vim.lsp.config("ruby_lsp", {
+        capabilities = capabilities,
+        on_attach = function(client)
+          client.server_capabilities.semanticTokensProvider = nil
+        end,
+      })
 
       vim.lsp.enable(servers)
 

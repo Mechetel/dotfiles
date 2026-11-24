@@ -18,6 +18,9 @@ return {
       require("conform").setup({
         formatters_by_ft = {
           lua = { "stylua" },
+          rust = { "rustfmt" },
+          c = { "clang-format" },
+          cpp = { "clang-format" },
           javascript = { "prettierd", "prettier", stop_after_first = true },
           typescript = { "prettierd", "prettier", stop_after_first = true },
           javascriptreact = { "prettierd", "prettier", stop_after_first = true },
@@ -31,6 +34,9 @@ return {
           -- ruby = { "rubocop" }, -- Using rubocop via LSP instead
         },
         formatters = {
+          ["clang-format"] = {
+            command = "/usr/local/opt/llvm/bin/clang-format", -- from `brew install llvm`
+          },
           stylua = {
             args = { "--indent-type", "Spaces", "--indent-width", "2", "-" },
           },
@@ -84,7 +90,7 @@ return {
       -- Create autocommand to lint on specific events
       local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
 
-      vim.api.nvim_create_autocmd({ "BufEnter", "BufWritePost", "InsertLeave" }, {
+      vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
         group = lint_augroup,
         callback = function()
           lint.try_lint()

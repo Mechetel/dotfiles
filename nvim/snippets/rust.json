@@ -1,0 +1,22 @@
+{
+  "Test module": {
+    "prefix": "tmod",
+    "body": [
+      "#[cfg(test)]",
+      "mod tests {",
+      "    use super::*;",
+      "",
+      "    #[test]",
+      "    fn ${1:it_works}() {",
+      "        ${0:assert_eq!(2 + 2, 4);}",
+      "    }",
+      "}"
+    ],
+    "description": "Module with unit tests"
+  },
+  "Derive common traits": {
+    "prefix": "dd",
+    "body": ["#[derive(Debug, Clone${1:, PartialEq})]"],
+    "description": "#[derive(Debug, Clone, ...)]"
+  }
+}
